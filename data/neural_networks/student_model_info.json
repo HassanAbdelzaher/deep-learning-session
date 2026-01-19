@@ -1,6 +1,6 @@
 {
-  "accuracy": 0.61,
-  "final_loss": 0.10310880217109855,
+  "accuracy": 0.62,
+  "final_loss": 0.11676304072545989,
   "architecture": [
     7,
     32,

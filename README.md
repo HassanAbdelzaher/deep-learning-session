@@ -6,42 +6,95 @@ A comprehensive Python project for learning mathematics and deep learning concep
 
 ```
 py-ai/
-├── src/
-│   ├── mathematics/          # Mathematical concepts and utilities
-│   │   ├── linear_algebra.py
-│   │   ├── calculus.py
-│   │   └── statistics.py
-│   ├── deep_learning/         # Deep learning implementations
-│   │   ├── neural_networks.py
-│   │   ├── cnn.py
-│   │   └── rnn.py
-│   └── utils/                 # Helper functions
-│       ├── data_loader.py     # Dataset loading utilities
-│       └── visualization.py
-├── docs/                      # Comprehensive documentation with graphs
-│   ├── 01_linear_algebra.md
-│   ├── 02_calculus.md
-│   ├── 03_statistics.md
-│   ├── 04_neural_networks.md
-│   ├── 05_cnns.md
-│   ├── 06_rnns.md
-│   ├── projects/              # Applied project documentation
-│   └── images/                # Generated visualization images
-├── notebooks/                 # Jupyter notebooks for interactive learning
+├── src/                        # Source code modules
+│   ├── mathematics/            # Mathematical concepts and utilities
+│   │   ├── __init__.py
+│   │   ├── linear_algebra.py   # Vector/matrix operations, visualizations
+│   │   ├── calculus.py         # Derivatives, gradients, optimization
+│   │   └── statistics.py       # Distributions, hypothesis testing
+│   ├── deep_learning/          # Deep learning implementations
+│   │   ├── __init__.py
+│   │   ├── neural_networks.py  # MLP, backpropagation, training
+│   │   ├── cnn.py              # Convolutional neural networks
+│   │   └── rnn.py              # Recurrent networks, LSTMs
+│   └── utils/                  # Helper functions and utilities
+│       ├── __init__.py
+│       ├── data_loader.py      # Dataset loading utilities
+│       ├── dataset_loader.py   # Alternative dataset loader
+│       └── visualization.py    # Visualization helpers
+│
+├── docs/                       # Comprehensive documentation with graphs
+│   ├── README.md               # Documentation index
+│   ├── 01_linear_algebra.md    # Linear algebra concepts
+│   ├── 02_calculus.md          # Calculus and optimization
+│   ├── 03_statistics.md        # Statistics and probability
+│   ├── 04_neural_networks.md   # Neural network fundamentals
+│   ├── 05_cnns.md              # Convolutional neural networks
+│   ├── 06_rnns.md              # Recurrent neural networks
+│   ├── projects/               # Applied project documentation
+│   │   ├── README.md
+│   │   ├── 01_applied_linear_algebra_projects.md
+│   │   ├── 02_applied_neural_network_projects.md
+│   │   └── PROJECT_7_SUMMARY.md
+│   └── images/                 # Generated visualization images
+│
+├── notebooks/                  # Jupyter notebooks for interactive learning
 │   ├── 01_mathematics_basics.ipynb
 │   ├── 02_neural_networks.ipynb
-│   └── 03-09_project_*.ipynb  # Applied project notebooks
-├── scripts/                   # Automation scripts
-│   ├── generate_neural_network_datasets.py
-│   ├── generate_student_dataset.py
-│   ├── train_student_model.py
-│   └── test_student_model.py
-├── data/                      # Datasets and data files
-│   └── neural_networks/       # Generated datasets
-├── tests/                     # Unit tests
-├── sessions/                  # Learning session modules
-├── Makefile                   # Automation commands
-└── requirements.txt           # Python dependencies
+│   ├── 03_project_1_mnist_digit_recognition.ipynb
+│   ├── 04_project_2_spam_detection.ipynb
+│   ├── 05_project_3_iris_classification.ipynb
+│   ├── 06_project_4_house_price_prediction.ipynb
+│   ├── 07_project_5_xor_problem.ipynb
+│   ├── 08_project_6_cnn_image_classification.ipynb
+│   └── 09_project_7_student_degree_classification.ipynb
+│
+├── scripts/                    # Automation and utility scripts
+│   ├── generate_neural_network_datasets.py  # Generate all NN datasets
+│   ├── generate_student_dataset.py          # Generate student dataset
+│   ├── train_student_model.py               # Train student classifier
+│   ├── test_student_model.py                # Test student classifier
+│   └── test_dataset_loader.py               # Test dataset loading
+│
+├── data/                       # Datasets and data files
+│   ├── README.md
+│   └── neural_networks/        # Generated datasets for NN projects
+│       ├── README.md
+│       ├── mnist_X.npy         # MNIST features (excluded from git)
+│       ├── mnist_y.npy         # MNIST labels (excluded from git)
+│       ├── iris_X.npy          # Iris dataset features
+│       ├── iris_y.npy           # Iris dataset labels
+│       ├── iris_metadata.pkl   # Iris metadata
+│       ├── spam_X.npy          # Spam detection features
+│       ├── spam_y.npy           # Spam detection labels
+│       ├── house_X.npy         # House price features
+│       ├── house_y.npy         # House price labels
+│       ├── house_metadata.pkl  # House price metadata
+│       ├── xor_X.npy           # XOR problem features
+│       ├── xor_y.npy           # XOR problem labels
+│       ├── cnn_X.npy           # CNN image features
+│       ├── cnn_y.npy           # CNN image labels
+│       ├── student_degree_dataset.csv  # Student classification CSV
+│       ├── student_X.npy        # Student features
+│       ├── student_y_scores.npy # Student scores
+│       ├── student_y_categories.npy # Student categories
+│       ├── student_y_encoded.npy # One-hot encoded labels
+│       └── student_model_info.json # Trained model metadata
+│
+├── tests/                      # Unit tests
+│   ├── __init__.py
+│   └── test_mathematics.py
+│
+├── sessions/                   # Learning session modules
+│   └── README.md
+│
+├── Makefile                    # Automation commands (see make help)
+├── MAKEFILE_USAGE.md          # Makefile usage documentation
+├── requirements.txt            # Python dependencies
+├── setup.py                    # Package setup configuration
+├── generate_docs_graphs.py     # Script to generate documentation graphs
+├── quick_start.py             # Quick start script
+└── .gitignore                  # Git ignore rules
 ```
 
 ## Quick Start
