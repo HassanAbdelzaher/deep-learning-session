@@ -2,6 +2,18 @@
 
 Welcome to the comprehensive learning documentation for Mathematics and Deep Learning!
 
+## 🗺️ [Learning Roadmap](LEARNING_ROADMAP.md)
+
+**Start here if you're new!** The Learning Roadmap provides:
+- Structured learning paths (Beginner → Intermediate → Advanced)
+- Week-by-week study plans
+- Timeline estimates (3.5-5 months full-time, 7-10 months part-time)
+- Project recommendations
+- Self-assessment checklists
+- Custom learning paths for different goals (Data Scientists, Software Engineers, Researchers, Students)
+
+[👉 Read the Learning Roadmap](LEARNING_ROADMAP.md)
+
 ## Mathematics Fundamentals
 
 ### [01. Linear Algebra](01_linear_algebra.md)

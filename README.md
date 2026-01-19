@@ -157,6 +157,10 @@ make help
 
 **Comprehensive learning guides with visualizations!** See [docs/README.md](docs/README.md) for the full index.
 
+### 🗺️ [Learning Roadmap](docs/LEARNING_ROADMAP.md)
+
+**New to the project?** Start with the [Learning Roadmap](docs/LEARNING_ROADMAP.md) - a comprehensive guide with structured learning paths from beginner to advanced, timeline estimates, and project recommendations.
+
 ### Mathematics Documentation
 - **[Linear Algebra](docs/01_linear_algebra.md)** - Vectors, matrices, eigenvalues with graphs
 - **[Calculus](docs/02_calculus.md)** - Derivatives, gradients, optimization with visualizations
