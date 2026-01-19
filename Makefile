@@ -24,11 +24,15 @@ TESTS_DIR := tests
 
 help: ## Show this help message
 	@echo Python AI Learning Project - Makefile Commands
-	@echo.
+	@echo
 	@echo Available commands:
 	@echo   install              Install project dependencies
 	@echo   install-dev          Install development dependencies
 	@echo   datasets             Generate all datasets
+	@echo   student-dataset      Generate student degree dataset
+	@echo   train-student-model  Train student classification model
+	@echo   test-student-model   Test student classification model
+	@echo   student-model        Complete student model pipeline
 	@echo   test-datasets        Test dataset loader
 	@echo   lint                 Run linters
 	@echo   format               Format code with black
@@ -38,7 +42,7 @@ help: ## Show this help message
 	@echo   setup                Complete project setup
 	@echo   all                  Run full setup and validation
 	@echo   info                 Show project information
-	@echo.
+	@echo
 	@echo For more commands, see the Makefile
 
 # ============================================================================
@@ -66,6 +70,26 @@ datasets: ## Generate all datasets for neural network projects
 	@echo Generating student degree dataset...
 	$(PYTHON) $(SCRIPTS_DIR)/generate_student_dataset.py
 	@echo [OK] Datasets generated
+
+student-dataset: ## Generate student degree classification dataset
+	@echo Generating student degree dataset...
+	$(PYTHON) $(SCRIPTS_DIR)/generate_student_dataset.py
+	@echo [OK] Student dataset generated
+
+train-student-model: student-dataset ## Train student degree classification model
+	@echo Training student classification model...
+	@$(PYTHON) -c "import matplotlib; import sklearn" 2>nul || $(PIP) install -q matplotlib scikit-learn
+	$(PYTHON) $(SCRIPTS_DIR)/train_student_model.py
+	@echo [OK] Model training complete
+
+test-student-model: ## Test student degree classification model
+	@echo Testing student classification model...
+	@$(PYTHON) -c "import matplotlib; import sklearn" 2>nul || $(PIP) install -q matplotlib scikit-learn
+	$(PYTHON) $(SCRIPTS_DIR)/test_student_model.py
+	@echo [OK] Model testing complete
+
+student-model: train-student-model test-student-model ## Complete student model pipeline (dataset + train + test)
+	@echo [OK] Student model pipeline complete
 
 test-datasets: ## Test dataset loader functionality
 	@echo Testing dataset loader...
@@ -153,6 +177,10 @@ run-rnn: ## Run RNN examples
 	@echo Running RNN examples...
 	$(PYTHON) -c "from src.deep_learning.rnn import *; print('RNN module loaded')"
 
+run-student-classification: ## Run student degree classification example
+	@echo Running student classification example...
+	$(PYTHON) $(SCRIPTS_DIR)/train_student_model.py
+
 # ============================================================================
 # Project Management
 # ============================================================================
@@ -183,7 +211,7 @@ clean-all: clean clean-datasets ## Clean everything including datasets
 
 setup: install datasets ## Complete project setup (install + generate datasets)
 	@echo [OK] Project setup complete!
-	@echo.
+	@echo
 	@echo Next steps:
 	@echo   1. Run 'make notebooks' to start Jupyter
 	@echo   2. Explore notebooks in $(NOTEBOOKS_DIR)/
@@ -209,7 +237,7 @@ all: clean install datasets test-datasets ## Run full setup and validation
 
 info: ## Show project information
 	@echo Python AI Learning Project
-	@echo.
+	@echo
 	@echo Project Structure:
 	@echo   Source Code:     $(SRC_DIR)/
 	@echo   Notebooks:       $(NOTEBOOKS_DIR)/
@@ -217,10 +245,10 @@ info: ## Show project information
 	@echo   Datasets:        $(DATA_DIR)/
 	@echo   Scripts:         $(SCRIPTS_DIR)/
 	@echo   Tests:           $(TESTS_DIR)/
-	@echo.
+	@echo
 	@echo Python Version:
 	@$(PYTHON) --version
-	@echo.
+	@echo
 	@echo Installed Packages:
 	@$(PIP) list | findstr /C:"numpy" /C:"matplotlib" /C:"scikit-learn" /C:"torch" /C:"jupyter" || echo   Run 'make install' to install packages
 

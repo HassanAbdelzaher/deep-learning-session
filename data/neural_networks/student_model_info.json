@@ -1,0 +1,12 @@
+{
+  "accuracy": 0.61,
+  "final_loss": 0.10310880217109855,
+  "architecture": [
+    7,
+    32,
+    16,
+    5
+  ],
+  "training_samples": 800,
+  "test_samples": 200
+}
