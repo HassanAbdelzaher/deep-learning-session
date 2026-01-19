@@ -28,6 +28,38 @@
 
 Linear algebra is the foundation of deep learning. Neural networks are essentially a series of matrix multiplications and transformations. Understanding vectors, matrices, and their operations is crucial for understanding how neural networks work.
 
+**Mermaid Diagram: Linear Algebra in Neural Networks**
+
+```mermaid
+flowchart TD
+    A["Input Data<br/>(Vector/Matrix)"] --> B["Layer 1:<br/>W₁ × x + b₁"]
+    B --> C["Activation Function<br/>σ(z)"]
+    C --> D["Layer 2:<br/>W₂ × a₁ + b₂"]
+    D --> E["Output<br/>(Predictions)"]
+    
+    F["Key Operations:"] --> G["Matrix Multiplication<br/>W × x"]
+    F --> H["Vector Addition<br/>+ b"]
+    F --> I["Element-wise Operations<br/>σ(z)"]
+    
+    J["Why Linear Algebra?"] --> K["Efficient Computation<br/>(Vectorized)"]
+    J --> L["Parallel Processing<br/>(GPU-friendly)"]
+    J --> M["Mathematical Foundation<br/>(Gradients, Optimization)"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#fff3e0
+    style E fill:#e8f5e9
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+    style H fill:#e0f2f1
+    style I fill:#e0f2f1
+    style J fill:#fff9c4
+    style K fill:#fff9c4
+    style L fill:#fff9c4
+    style M fill:#fff9c4
+```
+
 ## Vectors
 
 ### What is a Vector?
@@ -38,9 +70,60 @@ A vector is an ordered collection of numbers. In deep learning, vectors represen
 - Gradients during optimization
 - Activations in layers
 
+**Mermaid Diagram: Vector Representation**
+
+```mermaid
+graph LR
+    A["Vector v = [v₁, v₂, ..., vₙ]"] --> B["Geometric:<br/>Arrow in space"]
+    A --> C["Algebraic:<br/>Ordered tuple"]
+    A --> D["Computational:<br/>Array/List"]
+    
+    E["Properties:"] --> F["Magnitude: ||v|| = √(v₁² + v₂² + ...)"]
+    E --> G["Direction: Angle from axes"]
+    E --> H["Dimension: Number of components"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style E fill:#e0f2f1
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+    style H fill:#e0f2f1
+```
+
 ### Vector Operations
 
 #### Vector Addition
+
+**Mermaid Diagram: Vector Addition Process**
+
+```mermaid
+flowchart LR
+    A["Vector v₁<br/>[x₁, y₁]"] --> C["Add Components"]
+    B["Vector v₂<br/>[x₂, y₂]"] --> C
+    C --> D["Result v₁ + v₂<br/>[x₁+x₂, y₁+y₂]"]
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#ffebee
+```
+
+**Geometric Visualization:**
+
+```mermaid
+graph TB
+    subgraph "Vector Addition: v₁ + v₂"
+        O["Origin (0,0)"] -->|"v₁"| P1["Point (x₁, y₁)"]
+        O -->|"v₂"| P2["Point (x₂, y₂)"]
+        O -->|"v₁ + v₂"| P3["Point (x₁+x₂, y₁+y₂)"]
+        P1 -->|"Parallelogram Rule"| P3
+    end
+    style O fill:#f9f9f9
+    style P1 fill:#e1f5ff
+    style P2 fill:#e8f5e9
+    style P3 fill:#ffebee
+```
 
 ```python
 import numpy as np
@@ -85,6 +168,26 @@ plt.show()
 #### Dot Product (Scalar Product)
 
 The dot product measures how much two vectors point in the same direction.
+
+**Mermaid Diagram: Dot Product Calculation**
+
+```mermaid
+flowchart TD
+    A["Vector v₁ = [a₁, a₂, ..., aₙ]"] --> C["Multiply<br/>Component-wise"]
+    B["Vector v₂ = [b₁, b₂, ..., bₙ]"] --> C
+    C --> D["Sum Products<br/>a₁b₁ + a₂b₂ + ... + aₙbₙ"]
+    D --> E["Result: Scalar Value"]
+    
+    F["Geometric Formula"] --> G["v₁ · v₂ = ||v₁|| × ||v₂|| × cos(θ)"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style E fill:#ffebee
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+```
 
 ```python
 # Dot product
@@ -177,6 +280,24 @@ print(f"Projection length: {np.linalg.norm(proj_v2_on_v1):.2f}")
 #### Cross Product (3D only)
 
 The cross product produces a vector perpendicular to both input vectors.
+
+**Mermaid Diagram: Cross Product**
+
+```mermaid
+flowchart LR
+    A["v₁ = [x₁, y₁, z₁]"] --> C["Cross Product<br/>v₁ × v₂"]
+    B["v₂ = [x₂, y₂, z₂]"] --> C
+    C --> D["Result: Perpendicular Vector<br/>[y₁z₂ - z₁y₂,<br/>z₁x₂ - x₁z₂,<br/>x₁y₂ - y₁x₂]"]
+    
+    E["Right-Hand Rule"] --> F["Thumb: v₁<br/>Index: v₂<br/>Middle: Result"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#ffebee
+    style E fill:#f3e5f5
+    style F fill:#f3e5f5
+```
 
 ```python
 # Cross product (perpendicular to both vectors)
@@ -299,11 +420,118 @@ A matrix is a 2D array of numbers. In deep learning:
 - Input data is often represented as matrices
 - Transformations are matrix multiplications
 
+**Mermaid Diagram: Matrix Structure**
+
+```mermaid
+graph TB
+    A["Matrix A<br/>m rows × n columns"] --> B["A[i,j] = element at<br/>row i, column j"]
+    
+    C["Matrix Types:"] --> D["Square: m = n"]
+    C --> E["Rectangular: m ≠ n"]
+    C --> F["Identity: I[i,i] = 1,<br/>I[i,j] = 0 if i≠j"]
+    C --> G["Diagonal: Non-zero only<br/>on main diagonal"]
+    
+    H["In Neural Networks:"] --> I["Weight Matrix W:<br/>Connects layers"]
+    H --> J["Input Matrix X:<br/>Batch of samples"]
+    H --> K["Output Matrix Y:<br/>Predictions"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#e0f2f1
+    style D fill:#e0f2f1
+    style E fill:#e0f2f1
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+    style H fill:#fff9c4
+    style I fill:#fff9c4
+    style J fill:#fff9c4
+    style K fill:#fff9c4
+```
+
 ### Matrix Operations
 
 #### Matrix Multiplication
 
 Matrix multiplication is the core operation in neural networks. Each layer performs: `output = input × weights + bias`
+
+**Mermaid Diagram: Matrix Multiplication Process**
+
+```mermaid
+flowchart TD
+    A["Matrix A<br/>m × n"] --> C["Matrix<br/>Multiplication"]
+    B["Matrix B<br/>n × p"] --> C
+    C --> D["Result Matrix C<br/>m × p"]
+    
+    E["For each element C[i,j]:"] --> F["C[i,j] = Row i of A · Column j of B"]
+    F --> G["= Σ A[i,k] × B[k,j]<br/>for k = 1 to n"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#ffebee
+    style E fill:#f3e5f5
+    style F fill:#f3e5f5
+    style G fill:#f3e5f5
+```
+
+**Step-by-Step Matrix Multiplication:**
+
+```mermaid
+graph TB
+    subgraph "Matrix A (2×2)"
+        A11["A[0,0]"] 
+        A12["A[0,1]"]
+        A21["A[1,0]"]
+        A22["A[1,1]"]
+    end
+    
+    subgraph "Matrix B (2×2)"
+        B11["B[0,0]"]
+        B12["B[0,1]"]
+        B21["B[1,0]"]
+        B22["B[1,1]"]
+    end
+    
+    subgraph "Result C = A × B"
+        C11["C[0,0] = A[0,0]×B[0,0] + A[0,1]×B[1,0]"]
+        C12["C[0,1] = A[0,0]×B[0,1] + A[0,1]×B[1,1]"]
+        C21["C[1,0] = A[1,0]×B[0,0] + A[1,1]×B[1,0]"]
+        C22["C[1,1] = A[1,0]×B[0,1] + A[1,1]×B[1,1]"]
+    end
+    
+    A11 --> C11
+    A12 --> C11
+    B11 --> C11
+    B21 --> C11
+    
+    A11 --> C12
+    A12 --> C12
+    B12 --> C12
+    B22 --> C12
+    
+    A21 --> C21
+    A22 --> C21
+    B11 --> C21
+    B21 --> C21
+    
+    A21 --> C22
+    A22 --> C22
+    B12 --> C22
+    B22 --> C22
+    
+    style A11 fill:#e1f5ff
+    style A12 fill:#e1f5ff
+    style A21 fill:#e1f5ff
+    style A22 fill:#e1f5ff
+    style B11 fill:#e8f5e9
+    style B12 fill:#e8f5e9
+    style B21 fill:#e8f5e9
+    style B22 fill:#e8f5e9
+    style C11 fill:#ffebee
+    style C12 fill:#ffebee
+    style C21 fill:#ffebee
+    style C22 fill:#ffebee
+```
 
 ```python
 # Matrix multiplication
@@ -368,6 +596,24 @@ plt.show()
 
 #### Matrix Transpose
 
+**Mermaid Diagram: Matrix Transpose Operation**
+
+```mermaid
+flowchart LR
+    A["Matrix A<br/>m × n<br/>A[i,j]"] --> B["Transpose Operation<br/>Swap rows and columns"]
+    B --> C["Matrix Aᵀ<br/>n × m<br/>Aᵀ[j,i] = A[i,j]"]
+    
+    D["Example:"] --> E["A = [[1, 2, 3],<br/>     [4, 5, 6]]<br/>2×3"]
+    E --> F["Aᵀ = [[1, 4],<br/>      [2, 5],<br/>      [3, 6]]<br/>3×2"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#e8f5e9
+    style D fill:#f3e5f5
+    style E fill:#f3e5f5
+    style F fill:#f3e5f5
+```
+
 ```python
 A = np.array([[1, 2, 3], [4, 5, 6]])
 A_transpose = A.T
@@ -404,6 +650,33 @@ plt.show()
 #### Determinant and Inverse
 
 The determinant measures how much a matrix scales area/volume. The inverse undoes the transformation.
+
+**Mermaid Diagram: Determinant and Inverse**
+
+```mermaid
+flowchart TD
+    A["Matrix A"] --> B{"Calculate<br/>Determinant"}
+    B -->|"det(A) ≠ 0"| C["Matrix is<br/>Invertible"]
+    B -->|"det(A) = 0"| D["Matrix is<br/>Singular<br/>(No Inverse)"]
+    
+    C --> E["Calculate A⁻¹"]
+    E --> F["Verify:<br/>A × A⁻¹ = I<br/>(Identity Matrix)"]
+    
+    G["Geometric Meaning:"] --> H["det(A) = Area/Volume<br/>scaling factor"]
+    H --> I["det(A) > 0: Preserves orientation"]
+    H --> J["det(A) < 0: Reverses orientation"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#e8f5e9
+    style D fill:#ffebee
+    style E fill:#f3e5f5
+    style F fill:#f3e5f5
+    style G fill:#e0f2f1
+    style H fill:#e0f2f1
+    style I fill:#e0f2f1
+    style J fill:#e0f2f1
+```
 
 ```python
 A = np.array([[4, 2], [2, 3]])
@@ -557,6 +830,36 @@ For a matrix A, if `Av = λv` where:
 
 Then `v` is an eigenvector with eigenvalue `λ`.
 
+**Mermaid Diagram: Eigenvalue and Eigenvector Relationship**
+
+```mermaid
+flowchart TD
+    A["Matrix A"] --> B["Find Eigenvalues λ<br/>Solve: det(A - λI) = 0"]
+    B --> C["For each eigenvalue λ"]
+    C --> D["Find Eigenvector v<br/>Solve: (A - λI)v = 0"]
+    D --> E["Verify: Av = λv"]
+    
+    F["Geometric Interpretation:"] --> G["Eigenvector v:<br/>Direction unchanged<br/>by transformation A"]
+    G --> H["Eigenvalue λ:<br/>Scaling factor<br/>along eigenvector"]
+    
+    I["Applications:"] --> J["Principal Component Analysis<br/>(PCA)"]
+    I --> K["Neural Network Dynamics"]
+    I --> L["Matrix Decomposition"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e9
+    style E fill:#ffebee
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+    style H fill:#e0f2f1
+    style I fill:#fff9c4
+    style J fill:#fff9c4
+    style K fill:#fff9c4
+    style L fill:#fff9c4
+```
+
 ```python
 # Find eigenvalues and eigenvectors
 A = np.array([[4, 2], [2, 3]])
@@ -661,6 +964,30 @@ plt.show()
 
 ## Linear Transformations
 
+**Mermaid Diagram: Types of Linear Transformations**
+
+```mermaid
+graph TB
+    A["Linear Transformation<br/>y = Ax"] --> B["Identity<br/>No change"]
+    A --> C["Rotation<br/>Preserves length"]
+    A --> D["Reflection<br/>Mirror image"]
+    A --> E["Scaling<br/>Stretch/shrink"]
+    A --> F["Shear<br/>Skew shape"]
+    
+    B --> G["Matrix: [[1,0],[0,1]]<br/>Det = 1"]
+    C --> H["Matrix: [[cos θ, -sin θ],<br/>           [sin θ, cos θ]]<br/>Det = 1"]
+    D --> I["Matrix: [[1,0],[0,-1]]<br/>Det = -1"]
+    E --> J["Matrix: [[sx,0],[0,sy]]<br/>Det = sx × sy"]
+    F --> K["Matrix: [[1,k],[0,1]]<br/>Det = 1"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#ffebee
+    style E fill:#f3e5f5
+    style F fill:#e0f2f1
+```
+
 ### Common Matrix Transformations
 
 ```python
@@ -701,6 +1028,36 @@ for idx, (name, T) in enumerate(transformations.items(), 1):
 plt.tight_layout()
 plt.savefig('docs/images/linear_transformations.png', dpi=150, bbox_inches='tight')
 plt.show()
+```
+
+**Mermaid Diagram: Matrix Rank Concept**
+
+```mermaid
+flowchart TD
+    A["Matrix A"] --> B["Column Vectors"]
+    B --> C{"Are columns<br/>linearly independent?"}
+    
+    C -->|"All independent"| D["Full Rank<br/>Rank = min(m,n)"]
+    C -->|"Some dependent"| E["Low Rank<br/>Rank < min(m,n)"]
+    
+    D --> F["Column Space =<br/>Full dimension"]
+    E --> G["Column Space =<br/>Reduced dimension"]
+    
+    H["Rank Properties:"] --> I["Rank(A) = Rank(Aᵀ)"]
+    H --> J["Rank(AB) ≤ min(Rank(A), Rank(B))"]
+    H --> K["Full rank ⟺ det(A) ≠ 0<br/>(for square matrices)"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#fff3e0
+    style D fill:#e8f5e9
+    style E fill:#ffebee
+    style F fill:#e8f5e9
+    style G fill:#ffebee
+    style H fill:#f3e5f5
+    style I fill:#f3e5f5
+    style J fill:#f3e5f5
+    style K fill:#f3e5f5
 ```
 
 ### Matrix Rank Visualization
@@ -800,6 +1157,30 @@ plt.savefig('docs/images/vector_space.png', dpi=150, bbox_inches='tight')
 plt.show()
 ```
 
+**Mermaid Diagram: Linear Combination Concept**
+
+```mermaid
+flowchart LR
+    A["Basis Vector e₁"] --> D["Linear Combination"]
+    B["Basis Vector e₂"] --> D
+    C["Scalars c₁, c₂"] --> D
+    D --> E["Result Vector<br/>v = c₁e₁ + c₂e₂"]
+    
+    F["Properties:"] --> G["Span: All possible<br/>linear combinations"]
+    F --> H["Basis: Minimal set of<br/>linearly independent vectors"]
+    F --> I["Dimension: Number of<br/>vectors in basis"]
+    
+    style A fill:#e1f5ff
+    style B fill:#e8f5e9
+    style C fill:#fff3e0
+    style D fill:#f3e5f5
+    style E fill:#ffebee
+    style F fill:#e0f2f1
+    style G fill:#e0f2f1
+    style H fill:#e0f2f1
+    style I fill:#e0f2f1
+```
+
 ### Linear Combinations
 
 ```python
@@ -850,6 +1231,34 @@ for idx, (c1, c2, label) in enumerate(combinations):
 plt.tight_layout()
 plt.savefig('docs/images/linear_combinations.png', dpi=150, bbox_inches='tight')
 plt.show()
+```
+
+**Mermaid Diagram: Orthogonality and Orthonormality**
+
+```mermaid
+graph TB
+    A["Two Vectors v₁ and v₂"] --> B{"Check Dot Product<br/>v₁ · v₂ = ?"}
+    
+    B -->|"= 0"| C["Orthogonal<br/>(Perpendicular)"]
+    B -->|"≠ 0"| D["Not Orthogonal"]
+    
+    C --> E{"Are they also<br/>unit vectors?"}
+    E -->|"Yes: ||v₁|| = ||v₂|| = 1"| F["Orthonormal"]
+    E -->|"No"| G["Just Orthogonal"]
+    
+    H["Orthogonal Basis:"] --> I["All vectors are<br/>mutually orthogonal"]
+    I --> J["Easier to work with<br/>in computations"]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#e8f5e9
+    style D fill:#ffebee
+    style E fill:#f3e5f5
+    style F fill:#e8f5e9
+    style G fill:#fff3e0
+    style H fill:#e0f2f1
+    style I fill:#e0f2f1
+    style J fill:#e0f2f1
 ```
 
 ### Orthogonal Vectors
