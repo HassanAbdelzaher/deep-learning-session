@@ -13,6 +13,23 @@ This directory contains hands-on projects that apply linear algebra and deep lea
   5. Data Preprocessing Pipeline
   6. Face Recognition with Eigenfaces
 
+### Neural Network Projects
+- **[Applied Neural Network Projects](02_applied_neural_network_projects.md)** - 6 hands-on projects:
+  1. **Handwritten Digit Recognition (MNIST)** - Multi-class image classification
+  2. **Spam Detection** - Binary classification with neural networks
+  3. **Iris Classification** - Multi-class classification with decision boundaries
+  4. **House Price Prediction** - Regression with neural networks
+  5. **XOR Problem** - Demonstrating non-linearity importance
+  6. **CNN Image Classification** - Convolutional neural networks for images
+
+Each project includes a corresponding Jupyter notebook in the `notebooks/` directory:
+- `03_project_1_mnist_digit_recognition.ipynb`
+- `04_project_2_spam_detection.ipynb`
+- `05_project_3_iris_classification.ipynb`
+- `06_project_4_house_price_prediction.ipynb`
+- `07_project_5_xor_problem.ipynb`
+- `08_project_6_cnn_image_classification.ipynb`
+
 ## How to Use
 
 1. **Read the project description** - Understand the objective and theory
@@ -37,11 +54,13 @@ pip install -r requirements.txt
 ## Learning Outcomes
 
 After completing these projects, you will:
-- Understand how linear algebra is used in practice
+- Understand how linear algebra and neural networks are used in practice
 - Be able to implement algorithms from scratch
-- Visualize mathematical concepts
+- Visualize mathematical concepts and model predictions
 - Apply theory to real problems
-- Build confidence in using matrix operations
+- Build confidence in using matrix operations and neural networks
+- Handle different types of machine learning tasks (classification, regression)
+- Work with real-world datasets and preprocessing
 
 ## Next Steps
 

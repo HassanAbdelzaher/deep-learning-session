@@ -1,5 +1,6 @@
 """
 Convolutional Neural Networks (CNNs)
+Comprehensive module with visualizations and examples
 """
 
 import numpy as np
@@ -8,6 +9,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
+from scipy import ndimage
+from typing import Optional, Tuple
+from matplotlib.patches import Rectangle, Circle, FancyArrowPatch
 
 
 class SimpleCNN(nn.Module):
@@ -235,6 +239,157 @@ def cnn_training_example():
     return model, loss_history
 
 
+# ============================================================================
+# VISUALIZATION FUNCTIONS
+# ============================================================================
+
+def visualize_convolution_step_by_step(image: np.ndarray, kernel: np.ndarray,
+                                      save_path: Optional[str] = None):
+    """Visualize convolution operation step by step"""
+    result = ndimage.convolve(image, kernel, mode='constant')
+    
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+    im1 = axes[0].imshow(image, cmap='gray', vmin=0, vmax=1)
+    axes[0].set_title('Original Image', fontsize=12, fontweight='bold')
+    axes[0].axis('off')
+    plt.colorbar(im1, ax=axes[0])
+    
+    im2 = axes[1].imshow(kernel, cmap='RdBu', vmin=-1, vmax=1)
+    axes[1].set_title('Filter Kernel', fontsize=12, fontweight='bold')
+    axes[1].axis('off')
+    plt.colorbar(im2, ax=axes[1])
+    
+    im3 = axes[2].imshow(result, cmap='gray')
+    axes[2].set_title('Convolution Result', fontsize=12, fontweight='bold')
+    axes[2].axis('off')
+    plt.colorbar(im3, ax=axes[2])
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    return fig
+
+
+def visualize_cnn_architecture(save_path: Optional[str] = None):
+    """Visualize CNN architecture"""
+    fig, ax = plt.subplots(figsize=(14, 8))
+    
+    layers = [
+        ('Input\nImage\n28×28', 1, 4, 'lightblue'),
+        ('Conv1\n32 filters\n3×3', 3, 4, 'lightgreen'),
+        ('ReLU', 4.5, 4, 'yellow'),
+        ('MaxPool\n2×2', 6, 4, 'orange'),
+        ('Conv2\n64 filters\n3×3', 8, 4, 'lightgreen'),
+        ('ReLU', 9.5, 4, 'yellow'),
+        ('MaxPool\n2×2', 11, 4, 'orange'),
+        ('Flatten', 12.5, 4, 'lightcoral'),
+        ('FC1\n128', 14, 4, 'lightblue'),
+        ('FC2\n10', 15.5, 4, 'lightcoral')
+    ]
+    
+    for label, x, y, color in layers:
+        if 'Conv' in label or 'FC' in label or 'Input' in label:
+            rect = Rectangle((x-0.4, y-0.3), 0.8, 0.6, color=color, ec='black', linewidth=2)
+            ax.add_patch(rect)
+        else:
+            circle = Circle((x, y), 0.25, color=color, ec='black', linewidth=2)
+            ax.add_patch(circle)
+        ax.text(x, y, label, ha='center', va='center', fontsize=9, fontweight='bold')
+    
+    for i in range(len(layers) - 1):
+        x1, y1 = layers[i][1] + 0.4, layers[i][2]
+        x2, y2 = layers[i+1][1] - 0.4, layers[i+1][2]
+        ax.arrow(x1, y1, x2-x1, y2-y1, head_width=0.1, head_length=0.1,
+                fc='black', ec='black', linewidth=1.5)
+    
+    ax.set_xlim(0, 17)
+    ax.set_ylim(3, 5)
+    ax.set_title('CNN Architecture', fontsize=16, fontweight='bold')
+    ax.axis('off')
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    return fig
+
+
+def visualize_feature_maps(model, input_tensor, layer_name: str = 'conv1',
+                           save_path: Optional[str] = None):
+    """Visualize feature maps from a CNN layer"""
+    model.eval()
+    with torch.no_grad():
+        if layer_name == 'conv1':
+            features = model.conv1(input_tensor)
+            features = torch.relu(features)
+        elif layer_name == 'conv2':
+            x = torch.relu(model.conv1(input_tensor))
+            x = model.pool(x)
+            features = model.conv2(x)
+            features = torch.relu(features)
+        else:
+            features = input_tensor
+    
+    features = features[0].cpu().numpy()
+    num_filters = min(16, features.shape[0])
+    
+    fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+    for i in range(num_filters):
+        row, col = i // 4, i % 4
+        axes[row, col].imshow(features[i], cmap='viridis')
+        axes[row, col].set_title(f'Filter {i+1}', fontsize=8)
+        axes[row, col].axis('off')
+    
+    for i in range(num_filters, 16):
+        row, col = i // 4, i % 4
+        axes[row, col].axis('off')
+    
+    plt.suptitle(f'Feature Maps from {layer_name}', fontsize=14, fontweight='bold')
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    return fig
+
+
+def visualize_pooling_comparison(feature_map: np.ndarray, pool_size: int = 2,
+                                save_path: Optional[str] = None):
+    """Compare max and average pooling"""
+    def max_pooling(fm, ps):
+        h, w = fm.shape
+        output = np.zeros((h // ps, w // ps))
+        for i in range(0, h, ps):
+            for j in range(0, w, ps):
+                output[i // ps, j // ps] = np.max(fm[i:i+ps, j:j+ps])
+        return output
+    
+    def avg_pooling(fm, ps):
+        h, w = fm.shape
+        output = np.zeros((h // ps, w // ps))
+        for i in range(0, h, ps):
+            for j in range(0, w, ps):
+                output[i // ps, j // ps] = np.mean(fm[i:i+ps, j:j+ps])
+        return output
+    
+    max_pooled = max_pooling(feature_map, pool_size)
+    avg_pooled = avg_pooling(feature_map, pool_size)
+    
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+    axes[0].imshow(feature_map, cmap='viridis')
+    axes[0].set_title('Original Feature Map', fontsize=12, fontweight='bold')
+    axes[0].axis('off')
+    
+    axes[1].imshow(max_pooled, cmap='viridis')
+    axes[1].set_title(f'Max Pooling ({pool_size}×{pool_size})', fontsize=12, fontweight='bold')
+    axes[1].axis('off')
+    
+    axes[2].imshow(avg_pooled, cmap='viridis')
+    axes[2].set_title(f'Average Pooling ({pool_size}×{pool_size})', fontsize=12, fontweight='bold')
+    axes[2].axis('off')
+    
+    plt.tight_layout()
+    if save_path:
+        plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    return fig
+
+
 if __name__ == "__main__":
     print("=== Convolution Operation ===")
     convolution_operation_example()
@@ -244,3 +399,6 @@ if __name__ == "__main__":
     
     print("\n=== CNN Training ===")
     cnn_training_example()
+    
+    print("\n=== Generating Visualizations ===")
+    print("Run individual visualization functions to see graphs!")
