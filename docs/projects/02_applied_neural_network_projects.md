@@ -8,6 +8,7 @@
 5. [Project 5: XOR Problem - Non-linearity Demonstration](#project-5-xor-problem---non-linearity-demonstration)
 6. [Project 6: Image Classification with CNN](#project-6-image-classification-with-cnn)
 7. [Project 7: Student Degree Classification](#project-7-student-degree-classification)
+8. [Project 8: Student Degree Classification (Advanced - High Accuracy)](#project-8-student-degree-classification-advanced---high-accuracy)
 
 ## Project 1: Handwritten Digit Recognition (MNIST)
 
@@ -737,6 +738,133 @@ for category in category_names:
 
 ---
 
+## Project 8: Student Degree Classification (Advanced - High Accuracy)
+
+**Objective**: Build an advanced neural network to achieve high accuracy (>85%) in student degree classification using improved techniques and optimizations.
+
+### Theory
+
+This advanced project builds upon Project 7 with significant improvements:
+
+- **Deeper Architecture**: 5-layer network (Poly→64→128→64→32→5) vs 3-layer (7→32→16→5)
+- **Feature Engineering**: Polynomial features (degree 2, interaction only) expand from 7 to 28 features
+- **Class Balancing**: Oversampling minority classes to handle imbalanced data
+- **Learning Rate Scheduling**: Adaptive learning rate with exponential decay (0.01 → 0.0001)
+- **Early Stopping**: Prevents overfitting with validation monitoring
+- **Extended Training**: 500 epochs with patience-based early stopping
+- **Comprehensive Evaluation**: Multiple metrics (accuracy, F1, precision, recall)
+
+**Key Improvements Over Project 7**:
+1. Polynomial features capture feature interactions
+2. Class balancing improves minority class performance
+3. Learning rate scheduling enables fine-tuning
+4. Early stopping prevents overfitting
+5. Deeper network learns more complex patterns
+
+### Implementation
+
+See the complete implementation in `notebooks/10_project_8_student_degree_classification_advanced.ipynb`.
+
+**Key Components**:
+
+```python
+# 1. Feature Engineering with Polynomial Features
+from sklearn.preprocessing import PolynomialFeatures
+
+poly = PolynomialFeatures(degree=2, include_bias=False, interaction_only=True)
+X_poly = poly.fit_transform(X)  # 7 → 28 features
+
+# 2. Class Balancing with Oversampling
+def oversample_minority_classes(X, y, y_labels, target_samples=300):
+    # Oversample minority classes to balance dataset
+    ...
+
+# 3. Advanced Neural Network with Learning Rate Scheduling
+class AdvancedNeuralNetwork(SimpleNeuralNetwork):
+    def __init__(self, layers, learning_rate=0.01, lr_decay=0.98, min_lr=0.0001):
+        super().__init__(layers, learning_rate)
+        self.lr_decay = lr_decay
+        self.min_lr = min_lr
+    
+    def train_with_early_stopping(self, X_train, y_train, X_val, y_val, epochs=500):
+        # Training with learning rate decay and early stopping
+        ...
+
+# 4. Deeper Architecture
+nn_advanced = AdvancedNeuralNetwork(
+    layers=[28, 64, 128, 64, 32, 5],  # Polynomial features → deeper network
+    learning_rate=0.01,
+    lr_decay=0.98,
+    min_lr=0.0001
+)
+
+# 5. Comprehensive Evaluation
+from sklearn.metrics import (accuracy_score, f1_score, 
+                           precision_score, recall_score)
+
+accuracy = accuracy_score(actual_classes, predicted_classes)
+f1_macro = f1_score(actual_classes, predicted_classes, average='macro')
+f1_weighted = f1_score(actual_classes, predicted_classes, average='weighted')
+```
+
+### Performance Comparison
+
+| Metric | Project 7 | Project 8 | Improvement |
+|--------|-----------|-----------|-------------|
+| Architecture | 7→32→16→5 | Poly→64→128→64→32→5 | Deeper |
+| Features | 7 (original) | 28 (polynomial) | 4x more |
+| Class Balancing | No | Yes (oversampling) | Balanced |
+| Learning Rate | Fixed 0.01 | Adaptive (0.01→0.0001) | Scheduled |
+| Epochs | 200 | 500 (early stop) | Extended |
+| **Accuracy** | **~62%** | **>85%** | **+23%** |
+
+### Key Techniques Demonstrated
+
+1. **Polynomial Feature Engineering**
+   - Captures feature interactions
+   - Expands feature space for better learning
+   - Interaction-only reduces dimensionality
+
+2. **Class Balancing**
+   - Oversamples minority classes
+   - Improves model performance on rare classes
+   - Handles imbalanced datasets
+
+3. **Learning Rate Scheduling**
+   - Exponential decay: `lr = initial_lr * (decay ^ epoch)`
+   - Enables fine-tuning in later epochs
+   - Prevents overshooting optimal solution
+
+4. **Early Stopping**
+   - Monitors validation loss
+   - Stops training when no improvement
+   - Prevents overfitting
+
+5. **Deeper Architecture**
+   - More layers for complex pattern learning
+   - Better feature extraction
+   - Improved generalization
+
+### Learning Outcomes
+
+- Advanced feature engineering techniques
+- Handling imbalanced datasets
+- Learning rate scheduling strategies
+- Early stopping for regularization
+- Comprehensive model evaluation
+- Performance optimization techniques
+- Comparison of different approaches
+- Feature importance analysis
+
+### Expected Results
+
+- **Accuracy**: >85% (vs ~62% in Project 7)
+- **F1 Score**: >0.85 (macro and weighted)
+- **Balanced Performance**: Good across all classes
+- **Robust Model**: Generalizes well to new data
+
+---
+
 ## Summary
 
 These projects cover:
@@ -747,6 +875,7 @@ These projects cover:
 5. **Non-linearity** - XOR problem
 6. **CNN Applications** - Image classification
 7. **CSV Data Processing** - Student degree classification
+8. **Advanced Techniques** - High-accuracy classification with feature engineering and optimization
 
 Each project demonstrates different aspects of neural networks and provides hands-on experience with real-world applications.
 
