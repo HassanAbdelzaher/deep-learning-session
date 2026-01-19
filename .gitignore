@@ -53,3 +53,11 @@ models/
 # Logs
 logs/
 *.log
+
+# Documentation
+# Note: docs/ folder IS tracked (markdown files should be in git)
+# Only ignore generated images if desired (uncomment lines below)
+# docs/images/*.png
+# docs/images/*.jpg
+# docs/images/*.jpeg
+# docs/images/*.svg
