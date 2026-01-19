@@ -59,6 +59,15 @@ py-ai/
 - **[CNNs](docs/05_cnns.md)** - Convolution, pooling, feature learning
 - **[RNNs](docs/06_rnns.md)** - Recurrent networks, LSTMs, sequence processing
 
+### Applied Projects
+- **[Linear Algebra Projects](docs/projects/01_applied_linear_algebra_projects.md)** - 6 hands-on projects:
+  - Image Transformations
+  - Principal Component Analysis (PCA)
+  - Linear Regression from Scratch
+  - Simple Neural Network
+  - Data Preprocessing Pipeline
+  - Face Recognition with Eigenfaces
+
 Each documentation file includes:
 - Detailed explanations
 - Code examples with visualizations

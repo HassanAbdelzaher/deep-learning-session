@@ -42,6 +42,17 @@ Welcome to the comprehensive learning documentation for Mathematics and Deep Lea
 - Sequence processing
 - Applications
 
+## Applied Projects
+
+### [Linear Algebra Projects](projects/01_applied_linear_algebra_projects.md)
+6 hands-on projects applying linear algebra:
+1. **Image Transformations** - Rotate, scale, and reflect images using matrices
+2. **Principal Component Analysis (PCA)** - Dimensionality reduction with eigenvalues
+3. **Linear Regression from Scratch** - Implement using matrix operations
+4. **Simple Neural Network** - Build a network using only matrix multiplication
+5. **Data Preprocessing Pipeline** - Normalization and standardization
+6. **Face Recognition with Eigenfaces** - PCA for face recognition
+
 ## How to Use This Documentation
 
 1. **Start with Mathematics**: Build a strong foundation in linear algebra, calculus, and statistics
@@ -75,11 +86,14 @@ All visualization code saves images to `docs/images/`. Make sure to run the code
 **Beginner Path:**
 1. Linear Algebra → Calculus → Statistics
 2. Neural Networks → CNNs → RNNs
+3. **Apply knowledge with [Projects](projects/01_applied_linear_algebra_projects.md)**
 
 **Advanced Path:**
 - Dive deeper into each topic
 - Implement from scratch
 - Experiment with different architectures
+- Complete all applied projects
+- Create your own projects
 
 ## Contributing
 

@@ -1427,4 +1427,5 @@ All visualizations are saved to `docs/images/` when you run the code examples. T
 ## Next Steps
 
 - Study [Calculus for Deep Learning](02_calculus.md)
-- Learn about [Neural Networks](../docs/04_neural_networks.md)
+- Learn about [Neural Networks](04_neural_networks.md)
+- **Practice with [Applied Projects](../projects/01_applied_linear_algebra_projects.md)** - Hands-on projects using linear algebra!
