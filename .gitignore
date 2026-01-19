@@ -49,6 +49,9 @@ models/
 *.h5
 *.pt
 *.pth
+# Large dataset files (MNIST is too large for git)
+data/neural_networks/mnist_X.npy
+data/neural_networks/mnist_y.npy
 
 # Logs
 logs/
