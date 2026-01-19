@@ -172,7 +172,7 @@ make help
   - Face Recognition with Eigenfaces
 
 #### Neural Network Projects
-- **[Applied Neural Network Projects](docs/projects/02_applied_neural_network_projects.md)** - 8 practical projects:
+- **[Applied Neural Network Projects](docs/projects/02_applied_neural_network_projects.md)** - 9 practical projects:
   - **Project 1: MNIST Digit Recognition** - Handwritten digit classification
   - **Project 2: Spam Detection** - Binary text classification
   - **Project 3: Iris Classification** - Multi-class flower classification
@@ -181,6 +181,7 @@ make help
   - **Project 6: CNN Image Classification** - Convolutional neural networks
   - **Project 7: Student Degree Classification** - Real-world CSV data classification
   - **Project 8: Student Degree Classification (Advanced)** - High-accuracy with feature engineering
+  - **Project 9: Student Degree Classification (TensorFlow)** - Production-ready TensorFlow/Keras
 
 Each documentation file includes:
 - Detailed explanations
@@ -206,6 +207,7 @@ Interactive notebooks for hands-on learning:
 - **08_project_6_cnn_image_classification.ipynb** - CNN for image classification
 - **09_project_7_student_degree_classification.ipynb** - Student degree classification from CSV
 - **10_project_8_student_degree_classification_advanced.ipynb** - Advanced high-accuracy classification
+- **11_project_9_student_degree_classification_tensorflow.ipynb** - TensorFlow/Keras implementation
 
 ## Learning Sessions
 
@@ -306,7 +308,7 @@ The model classifies students into 5 categories (Bad, Acceptable, Good, Very Goo
 
 - **Comprehensive Documentation**: Detailed markdown files with theory, code, and visualizations
 - **Interactive Notebooks**: Jupyter notebooks for hands-on learning
-- **Applied Projects**: 14+ real-world projects covering linear algebra and neural networks
+- **Applied Projects**: 15+ real-world projects covering linear algebra and neural networks
 - **Automated Workflows**: Makefile for easy dataset generation, model training, and testing
 - **Visual Learning**: Extensive use of graphs, charts, and Mermaid diagrams
 - **Real Datasets**: Support for MNIST, Iris, and custom datasets

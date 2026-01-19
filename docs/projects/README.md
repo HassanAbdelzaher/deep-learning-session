@@ -14,7 +14,7 @@ This directory contains hands-on projects that apply linear algebra and deep lea
   6. Face Recognition with Eigenfaces
 
 ### Neural Network Projects
-- **[Applied Neural Network Projects](02_applied_neural_network_projects.md)** - 8 hands-on projects:
+- **[Applied Neural Network Projects](02_applied_neural_network_projects.md)** - 9 hands-on projects:
   1. **Handwritten Digit Recognition (MNIST)** - Multi-class image classification
   2. **Spam Detection** - Binary classification with neural networks
   3. **Iris Classification** - Multi-class classification with decision boundaries
@@ -23,6 +23,7 @@ This directory contains hands-on projects that apply linear algebra and deep lea
   6. **CNN Image Classification** - Convolutional neural networks for images
   7. **Student Degree Classification** - CSV-based multi-class classification
   8. **Student Degree Classification (Advanced)** - High-accuracy classification with feature engineering
+  9. **Student Degree Classification (TensorFlow)** - Production-ready TensorFlow/Keras implementation
 
 Each project includes a corresponding Jupyter notebook in the `notebooks/` directory:
 - `03_project_1_mnist_digit_recognition.ipynb`
@@ -33,6 +34,7 @@ Each project includes a corresponding Jupyter notebook in the `notebooks/` direc
 - `08_project_6_cnn_image_classification.ipynb`
 - `09_project_7_student_degree_classification.ipynb`
 - `10_project_8_student_degree_classification_advanced.ipynb`
+- `11_project_9_student_degree_classification_tensorflow.ipynb`
 
 ## How to Use
 

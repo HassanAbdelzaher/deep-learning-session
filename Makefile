@@ -29,11 +29,14 @@ help: ## Show this help message
 	@echo   install              Install project dependencies
 	@echo   install-dev          Install development dependencies
 	@echo   datasets             Generate all datasets
-	@echo   student-dataset      Generate student degree dataset
-	@echo   train-student-model  Train student classification model
-	@echo   test-student-model   Test student classification model
-	@echo   student-model        Complete student model pipeline
-	@echo   test-datasets        Test dataset loader
+	@echo   student-dataset              Generate student degree dataset
+	@echo   train-student-model          Train student classification model (custom NN)
+	@echo   test-student-model           Test student classification model (custom NN)
+	@echo   student-model               Complete student model pipeline (custom NN)
+	@echo   train-tensorflow-student-model  Train TensorFlow/Keras student model
+	@echo   test-tensorflow-student-model   Test TensorFlow/Keras student model
+	@echo   tensorflow-student-model         Complete TensorFlow student model pipeline
+	@echo   test-datasets                Test dataset loader
 	@echo   lint                 Run linters
 	@echo   format               Format code with black
 	@echo   test                 Run all tests
@@ -90,6 +93,23 @@ test-student-model: ## Test student degree classification model
 
 student-model: train-student-model test-student-model ## Complete student model pipeline (dataset + train + test)
 	@echo [OK] Student model pipeline complete
+
+train-tensorflow-student-model: student-dataset ## Train TensorFlow/Keras student classification model
+	@echo Training TensorFlow student classification model...
+	@$(PYTHON) -c "import tensorflow" 2>nul || $(PIP) install -q tensorflow
+	@$(PYTHON) -c "import sklearn; import numpy; import pandas" 2>nul || $(PIP) install -q scikit-learn numpy pandas
+	$(PYTHON) $(SCRIPTS_DIR)/train_tensorflow_student_model.py
+	@echo [OK] TensorFlow model training complete
+
+test-tensorflow-student-model: ## Test TensorFlow/Keras student classification model
+	@echo Testing TensorFlow student classification model...
+	@$(PYTHON) -c "import tensorflow" 2>nul || $(PIP) install -q tensorflow
+	@$(PYTHON) -c "import sklearn; import numpy; import pandas" 2>nul || $(PIP) install -q scikit-learn numpy pandas
+	$(PYTHON) $(SCRIPTS_DIR)/test_tensorflow_student_model.py
+	@echo [OK] TensorFlow model testing complete
+
+tensorflow-student-model: train-tensorflow-student-model test-tensorflow-student-model ## Complete TensorFlow student model pipeline
+	@echo [OK] TensorFlow student model pipeline complete
 
 test-datasets: ## Test dataset loader functionality
 	@echo Testing dataset loader...
@@ -177,9 +197,16 @@ run-rnn: ## Run RNN examples
 	@echo Running RNN examples...
 	$(PYTHON) -c "from src.deep_learning.rnn import *; print('RNN module loaded')"
 
-run-student-classification: ## Run student degree classification example
+run-student-classification: ## Run student degree classification example (custom NN)
 	@echo Running student classification example...
+	@$(PYTHON) -c "import matplotlib; import sklearn" 2>nul || $(PIP) install -q matplotlib scikit-learn
 	$(PYTHON) $(SCRIPTS_DIR)/train_student_model.py
+
+run-tensorflow-student-classification: ## Run TensorFlow student degree classification example
+	@echo Running TensorFlow student classification example...
+	@$(PYTHON) -c "import tensorflow" 2>nul || $(PIP) install -q tensorflow
+	@$(PYTHON) -c "import sklearn; import numpy; import pandas" 2>nul || $(PIP) install -q scikit-learn numpy pandas
+	$(PYTHON) $(SCRIPTS_DIR)/train_tensorflow_student_model.py
 
 # ============================================================================
 # Project Management
@@ -202,7 +229,14 @@ clean-datasets: ## Remove generated datasets (keeps structure)
 	@del /q $(DATA_DIR)\neural_networks\*.pkl 2>nul
 	@echo [OK] Datasets cleaned (run 'make datasets' to regenerate)
 
-clean-all: clean clean-datasets ## Clean everything including datasets
+clean-models: ## Clean trained model files
+	@echo Cleaning model files...
+	@del /q $(DATA_DIR)\neural_networks\*.h5 2>nul
+	@del /q $(DATA_DIR)\neural_networks\*_model_info.json 2>nul
+	@del /q $(DATA_DIR)\neural_networks\training_history.csv 2>nul
+	@echo [OK] Model files cleaned
+
+clean-all: clean clean-datasets clean-models ## Clean everything including datasets and models
 	@echo [OK] Full cleanup complete
 
 # ============================================================================
