@@ -7,6 +7,7 @@
 4. [Project 4: Regression - House Price Prediction](#project-4-regression---house-price-prediction)
 5. [Project 5: XOR Problem - Non-linearity Demonstration](#project-5-xor-problem---non-linearity-demonstration)
 6. [Project 6: Image Classification with CNN](#project-6-image-classification-with-cnn)
+7. [Project 7: Student Degree Classification](#project-7-student-degree-classification)
 
 ## Project 1: Handwritten Digit Recognition (MNIST)
 
@@ -584,6 +585,158 @@ visualize_cnn_architecture(save_path='docs/images/cnn_architecture.png')
 
 ---
 
+## Project 7: Student Degree Classification
+
+**Objective**: Build a neural network to classify students into degree categories based on their academic performance using a CSV dataset.
+
+### Theory
+
+This project demonstrates:
+- **CSV Data Processing**: Loading and preprocessing CSV files
+- **Multi-class Classification**: 5 degree categories (Bad, Acceptable, Good, Very Good, Excellent)
+- **Feature Engineering**: Using multiple academic features to predict performance
+- **Real-world Application**: Practical use case for educational data
+
+**Degree Categories** (based on final score):
+- **Bad**: score < 50
+- **Acceptable**: 50 ≤ score < 65
+- **Good**: 65 ≤ score < 75
+- **Very Good**: 75 ≤ score < 85
+- **Excellent**: score ≥ 85
+
+### Implementation
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import classification_report, confusion_matrix
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(os.getcwd()), 'src'))
+from deep_learning.neural_networks import SimpleNeuralNetwork
+
+# Load dataset from CSV
+print("Loading student dataset...")
+df = pd.read_csv('data/neural_networks/student_degree_dataset.csv')
+
+print(f"Dataset shape: {df.shape}")
+print(f"\nFirst few rows:")
+print(df.head())
+
+# Prepare features and labels
+feature_columns = ['attendance', 'quiz_avg', 'assignment_avg', 'midterm_score',
+                   'project_score', 'study_hours_per_week', 'participation_score']
+X = df[feature_columns].values
+y_categories = df['degree_category'].values
+
+# Map categories to numbers
+category_mapping = {
+    'Bad': 0,
+    'Acceptable': 1,
+    'Good': 2,
+    'Very Good': 3,
+    'Excellent': 4
+}
+y = np.array([category_mapping[cat] for cat in y_categories])
+
+# One-hot encode
+def one_hot_encode(y, num_classes=5):
+    encoded = np.zeros((len(y), num_classes))
+    encoded[np.arange(len(y)), y] = 1
+    return encoded
+
+y_encoded = one_hot_encode(y)
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y_encoded, test_size=0.2, random_state=42, stratify=y
+)
+
+# Scale features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+print(f"\nTraining set: {X_train.shape[0]} samples")
+print(f"Test set: {X_test.shape[0]} samples")
+print(f"Features: {X_train.shape[1]}")
+print(f"Classes: {y_encoded.shape[1]}")
+
+# Create and train neural network
+print("\nCreating neural network...")
+nn = SimpleNeuralNetwork(layers=[7, 32, 16, 5], learning_rate=0.01)
+
+print("Training neural network...")
+loss_history = nn.train(X_train, y_train, epochs=200, verbose=True)
+
+# Evaluate
+predictions = nn.predict(X_test)
+predicted_classes = np.argmax(predictions, axis=1)
+actual_classes = np.argmax(y_test, axis=1)
+accuracy = np.mean(predicted_classes == actual_classes)
+
+print(f"\nTest Accuracy: {accuracy:.4f} ({accuracy*100:.2f}%)")
+
+# Classification report
+category_names = ['Bad', 'Acceptable', 'Good', 'Very Good', 'Excellent']
+print("\nClassification Report:")
+print(classification_report(actual_classes, predicted_classes, target_names=category_names))
+
+# Confusion matrix
+cm = confusion_matrix(actual_classes, predicted_classes)
+
+# Visualize results
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Training loss
+axes[0].plot(loss_history)
+axes[0].set_xlabel('Epoch')
+axes[0].set_ylabel('Loss')
+axes[0].set_title('Training Loss')
+axes[0].grid(True, alpha=0.3)
+
+# Confusion matrix
+im = axes[1].imshow(cm, cmap='Blues', interpolation='nearest')
+axes[1].set_xticks(range(5))
+axes[1].set_yticks(range(5))
+axes[1].set_xticklabels(category_names, rotation=45, ha='right')
+axes[1].set_yticklabels(category_names)
+axes[1].set_xlabel('Predicted')
+axes[1].set_ylabel('Actual')
+axes[1].set_title('Confusion Matrix')
+for i in range(5):
+    for j in range(5):
+        axes[1].text(j, i, str(cm[i, j]), ha='center', va='center',
+                    fontsize=10, fontweight='bold',
+                    color='white' if cm[i, j] > cm.max()/2 else 'black')
+plt.colorbar(im, ax=axes[1])
+plt.tight_layout()
+plt.savefig('docs/images/student_degree_classification.png', dpi=150, bbox_inches='tight')
+plt.show()
+
+# Feature importance analysis
+print("\nFeature Statistics by Degree Category:")
+for category in category_names:
+    category_idx = category_mapping[category]
+    category_data = df[df['degree_category'] == category]
+    print(f"\n{category}:")
+    for col in feature_columns:
+        print(f"  {col}: {category_data[col].mean():.2f} (std: {category_data[col].std():.2f})")
+```
+
+### Learning Outcomes
+- CSV data loading and preprocessing
+- Multi-class classification with 5 classes
+- Feature scaling importance
+- Real-world educational data application
+- Confusion matrix interpretation
+- Feature analysis by category
+
+---
+
 ## Summary
 
 These projects cover:
@@ -593,6 +746,7 @@ These projects cover:
 4. **Regression** - House price prediction
 5. **Non-linearity** - XOR problem
 6. **CNN Applications** - Image classification
+7. **CSV Data Processing** - Student degree classification
 
 Each project demonstrates different aspects of neural networks and provides hands-on experience with real-world applications.
 

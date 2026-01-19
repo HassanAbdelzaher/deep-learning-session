@@ -53,5 +53,11 @@ try:
 except Exception as e:
     print(f"[ERROR] MNIST: {e}")
 
+try:
+    X, y_scores, y_categories, df = dataset_loader.load_student_degree()
+    print(f"[OK] Student degree dataset: {X.shape}, scores: {y_scores.shape}, categories: {y_categories.shape}")
+except Exception as e:
+    print(f"[ERROR] Student degree: {e}")
+
 print("=" * 60)
 print("Dataset loader test complete!")

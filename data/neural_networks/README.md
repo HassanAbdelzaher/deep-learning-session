@@ -44,6 +44,14 @@ This directory contains pre-generated datasets for the applied neural network pr
 - **Image Shape**: (3, 32, 32) - RGB images
 - **Classes**: 10
 
+### 7. Student Degree Classification (`student_degree_dataset.csv`, `student_X.npy`, `student_y_*.npy`)
+- **Project**: Student Degree Classification
+- **Samples**: 1,000
+- **Features**: 7 (attendance, quiz_avg, assignment_avg, midterm_score, project_score, study_hours_per_week, participation_score)
+- **Classes**: 5 (Bad, Acceptable, Good, Very Good, Excellent)
+- **Format**: CSV file + NumPy arrays
+- **Note**: Includes both final scores and degree categories
+
 ## Usage
 
 ### Option 1: Use Dataset Loader (Recommended)
@@ -106,6 +114,7 @@ This will:
 - **House Prices**: ~80 KB
 - **XOR**: ~160 bytes
 - **CNN Images**: ~24 MB
+- **Student Degree**: ~60 KB (CSV) + ~30 KB (NumPy arrays)
 
 ## Notes
 

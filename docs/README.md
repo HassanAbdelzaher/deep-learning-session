@@ -54,13 +54,14 @@ Welcome to the comprehensive learning documentation for Mathematics and Deep Lea
 6. **Face Recognition with Eigenfaces** - PCA for face recognition
 
 ### [Neural Network Projects](projects/02_applied_neural_network_projects.md)
-6 hands-on projects applying neural networks:
+7 hands-on projects applying neural networks:
 1. **Handwritten Digit Recognition (MNIST)** - Multi-class image classification
 2. **Spam Detection** - Binary classification with neural networks
 3. **Iris Classification** - Multi-class classification with decision boundaries
 4. **House Price Prediction** - Regression with neural networks
 5. **XOR Problem** - Demonstrating non-linearity importance
 6. **CNN Image Classification** - Convolutional neural networks for images
+7. **Student Degree Classification** - CSV-based multi-class classification
 
 Each project has a corresponding Jupyter notebook in `notebooks/` for interactive learning!
 

@@ -14,13 +14,14 @@ This directory contains hands-on projects that apply linear algebra and deep lea
   6. Face Recognition with Eigenfaces
 
 ### Neural Network Projects
-- **[Applied Neural Network Projects](02_applied_neural_network_projects.md)** - 6 hands-on projects:
+- **[Applied Neural Network Projects](02_applied_neural_network_projects.md)** - 7 hands-on projects:
   1. **Handwritten Digit Recognition (MNIST)** - Multi-class image classification
   2. **Spam Detection** - Binary classification with neural networks
   3. **Iris Classification** - Multi-class classification with decision boundaries
   4. **House Price Prediction** - Regression with neural networks
   5. **XOR Problem** - Demonstrating non-linearity importance
   6. **CNN Image Classification** - Convolutional neural networks for images
+  7. **Student Degree Classification** - CSV-based multi-class classification
 
 Each project includes a corresponding Jupyter notebook in the `notebooks/` directory:
 - `03_project_1_mnist_digit_recognition.ipynb`
@@ -29,6 +30,7 @@ Each project includes a corresponding Jupyter notebook in the `notebooks/` direc
 - `06_project_4_house_price_prediction.ipynb`
 - `07_project_5_xor_problem.ipynb`
 - `08_project_6_cnn_image_classification.ipynb`
+- `09_project_7_student_degree_classification.ipynb`
 
 ## How to Use
 

@@ -253,6 +253,20 @@ print("  [OK] Dataset loader created at: src/utils/dataset_loader.py")
 # ============================================================================
 # Summary
 # ============================================================================
+# ============================================================================
+# Project 7: Student Degree Classification Dataset
+# ============================================================================
+print("\n[7/7] Generating Student Degree Classification Dataset...")
+try:
+    import pandas as pd
+    from scripts.generate_student_dataset import *
+    # Run the student dataset generator
+    exec(open('scripts/generate_student_dataset.py').read())
+    print("  [OK] Student degree dataset generated")
+except Exception as e:
+    print(f"  [ERROR] Error generating student dataset: {e}")
+    print("    Run 'python scripts/generate_student_dataset.py' separately")
+
 print("\n" + "=" * 60)
 print("Dataset Generation Complete!")
 print("=" * 60)
@@ -264,7 +278,9 @@ print("  3. Iris - Multi-class classification")
 print("  4. House Prices - Regression")
 print("  5. XOR - Non-linearity demonstration")
 print("  6. CNN Images - Image classification")
+print("  7. Student Degree - CSV-based classification")
 print("\nYou can now use these datasets in your notebooks!")
 print("\nExample usage:")
-print("  from src.utils.dataset_loader import load_mnist")
+print("  from src.utils.dataset_loader import load_mnist, load_student_degree")
 print("  X, y = load_mnist()")
+print("  X, scores, categories, df = load_student_degree()")

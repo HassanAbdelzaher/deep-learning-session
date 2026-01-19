@@ -49,3 +49,14 @@ def load_cnn_images():
     X = np.load(DATA_DIR / 'cnn_X.npy')
     y = np.load(DATA_DIR / 'cnn_y.npy')
     return X, y
+
+def load_student_degree():
+    """Load student degree classification dataset"""
+    import pandas as pd
+    df = pd.read_csv(DATA_DIR / 'student_degree_dataset.csv')
+    feature_columns = ['attendance', 'quiz_avg', 'assignment_avg', 'midterm_score',
+                       'project_score', 'study_hours_per_week', 'participation_score']
+    X = df[feature_columns].values
+    y_scores = df['final_score'].values
+    y_categories = df['degree_category'].values
+    return X, y_scores, y_categories, df
