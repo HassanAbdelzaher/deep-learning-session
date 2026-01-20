@@ -45,7 +45,28 @@ help: ## Show this help message
 	@echo   setup                Complete project setup
 	@echo   all                  Run full setup and validation
 	@echo   info                 Show project information
-	@echo
+	@echo.
+	@echo Mathematics and Visualization Commands:
+	@echo   run-linear-algebra         Run linear algebra examples
+	@echo   run-image-processing      Run image processing examples and generate visualizations
+	@echo   generate-image-visualizations  Generate all image processing visualizations
+	@echo   run-calculus              Run all calculus examples
+	@echo   run-calculus-derivatives  Visualize function and its derivative
+	@echo   run-calculus-tangents    Visualize tangent lines
+	@echo   run-calculus-examples     Run calculus examples (integration, etc.)
+	@echo   generate-calculus-visualizations  Generate all calculus visualizations
+	@echo   run-gradients             Run all gradient examples
+	@echo   run-gradients-examples    Run gradient examples (gradient descent, partial derivatives, etc.)
+	@echo   run-gradients-field       Visualize gradient field (2D)
+	@echo   run-gradients-descent     Visualize gradient descent optimization
+	@echo   run-gradients-learning-rates  Compare different learning rates
+	@echo   run-gradients-computation-graph  Visualize computation graph and gradient flow
+	@echo   generate-gradients-visualizations  Generate all gradient visualizations
+	@echo   run-statistics            Run statistics examples
+	@echo   run-neural-networks       Run neural network examples
+	@echo   run-cnn                  Run CNN examples
+	@echo   run-rnn                  Run RNN examples
+	@echo.
 	@echo For more commands, see the Makefile
 
 # ============================================================================
@@ -175,11 +196,88 @@ docs: ## Generate documentation (if using Sphinx)
 
 run-linear-algebra: ## Run linear algebra examples
 	@echo Running linear algebra examples...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
 	$(PYTHON) -c "from src.mathematics.linear_algebra import *; print('Linear algebra module loaded')"
 
-run-calculus: ## Run calculus examples
+run-image-processing: ## Run image processing examples and generate visualizations
+	@echo Running image processing examples...
+	@$(PYTHON) -c "import matplotlib; import numpy; import scipy" 2>nul || $(PIP) install -q matplotlib numpy scipy
+	@echo Generating image processing visualizations...
+	$(PYTHON) -c "from src.mathematics.image_processing import *; print('Image processing module loaded')"
+	$(PYTHON) $(SRC_DIR)/mathematics/image_processing.py
+	@echo [OK] Image processing visualizations generated in docs/images/
+
+generate-image-visualizations: ## Generate all image processing visualizations
+	@echo Generating image processing visualizations...
+	@$(PYTHON) -c "import matplotlib; import numpy; import scipy" 2>nul || $(PIP) install -q matplotlib numpy scipy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.image_processing import visualize_image_as_matrix, visualize_image_transformations, visualize_image_filtering, visualize_image_compression_svd, visualize_edge_detection; visualize_image_as_matrix('docs/images/image_as_matrix.png'); visualize_image_transformations('docs/images/image_transformations_linear_algebra.png'); visualize_image_filtering('docs/images/image_filtering_convolution.png'); visualize_image_compression_svd('docs/images/image_compression_svd.png'); visualize_edge_detection('docs/images/edge_detection_matrix_operations.png'); print('[OK] All image processing visualizations generated')"
+	@echo [OK] Image processing visualizations generated
+
+run-calculus: ## Run all calculus examples
+	@echo Running all calculus examples...
+	@$(PYTHON) -c "import matplotlib; import numpy; import scipy" 2>nul || $(PIP) install -q matplotlib numpy scipy
+	$(PYTHON) $(SRC_DIR)/mathematics/calculus.py
+
+run-calculus-derivatives: ## Visualize function and its derivative
+	@echo Generating function and derivative visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.calculus import visualize_function_and_derivative; import numpy as np; f = lambda x: x**3 - 3*x**2 + 2; df = lambda x: 3*x**2 - 6*x; visualize_function_and_derivative(f, df, save_path='docs/images/function_and_derivative.png'); print('[OK] Function and derivative visualization generated')"
+
+run-calculus-tangents: ## Visualize tangent lines
+	@echo Generating tangent lines visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.calculus import visualize_tangent_lines; import numpy as np; f = lambda x: x**2; df = lambda x: 2*x; visualize_tangent_lines(f, df, points=[-2, -1, 0, 1, 2], save_path='docs/images/tangent_lines.png'); print('[OK] Tangent lines visualization generated')"
+
+# Gradient functions moved to gradients module - use run-gradients-* commands instead
+
+run-gradients: ## Run all gradient examples
+	@echo Running gradient examples...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	$(PYTHON) $(SRC_DIR)/mathematics/gradients.py
+
+run-gradients-examples: ## Run gradient examples (gradient descent, partial derivatives, neural network gradients)
+	@echo Running gradient examples...
+	@$(PYTHON) -c "import numpy" 2>nul || $(PIP) install -q numpy
+	$(PYTHON) -c "from src.mathematics.gradients import gradient_descent_example, partial_derivatives_example, neural_network_gradient_example; print('=== Gradient Descent ==='); gradient_descent_example(); print('\n=== Partial Derivatives ==='); partial_derivatives_example(); print('\n=== Neural Network Gradients ==='); neural_network_gradient_example()"
+
+run-gradients-field: ## Visualize gradient field (2D)
+	@echo Generating gradient field visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.gradients import visualize_gradient_field; import numpy as np; f_2d = lambda x, y: x**2 + y**2; visualize_gradient_field(f_2d, save_path='docs/images/gradient_field.png'); print('[OK] Gradient field visualization generated')"
+
+run-gradients-descent: ## Visualize gradient descent optimization
+	@echo Generating gradient descent visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.gradients import visualize_gradient_descent; import numpy as np; f = lambda x: x**2 + 2*x + 1; df = lambda x: 2*x + 2; visualize_gradient_descent(f, df, x_start=5.0, learning_rate=0.1, iterations=50, save_path='docs/images/gradient_descent.png'); print('[OK] Gradient descent visualization generated')"
+
+run-gradients-learning-rates: ## Compare different learning rates
+	@echo Generating learning rate comparison visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.gradients import compare_learning_rates; import numpy as np; f = lambda x: x**2 + 2*x + 1; df = lambda x: 2*x + 2; compare_learning_rates(f, df, x_start=5.0, learning_rates=[0.01, 0.1, 0.5, 1.0], iterations=30, save_path='docs/images/learning_rates_comparison.png'); print('[OK] Learning rates comparison visualization generated')"
+
+run-gradients-computation-graph: ## Visualize computation graph and gradient flow
+	@echo Generating computation graph visualization...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) -c "from src.mathematics.gradients import visualize_computation_graph; visualize_computation_graph(save_path='docs/images/computation_graph.png'); print('[OK] Computation graph visualization generated')"
+
+generate-gradients-visualizations: run-gradients-field run-gradients-descent run-gradients-learning-rates run-gradients-computation-graph ## Generate all gradient visualizations
+	@echo [OK] All gradient visualizations generated
+
+run-calculus-examples: ## Run calculus examples (integration, etc. - gradients moved to gradients module)
 	@echo Running calculus examples...
-	$(PYTHON) -c "from src.mathematics.calculus import *; print('Calculus module loaded')"
+	@$(PYTHON) -c "import numpy; import scipy" 2>nul || $(PIP) install -q numpy scipy
+	$(PYTHON) -c "from src.mathematics.calculus import integration_example; print('=== Numerical Integration ==='); integration_example()"
+
+generate-calculus-visualizations: run-calculus-derivatives run-calculus-tangents ## Generate all calculus visualizations
+	@echo [OK] All calculus visualizations generated
+	@echo Note: Gradient visualizations moved to generate-gradients-visualizations
 
 run-statistics: ## Run statistics examples
 	@echo Running statistics examples...

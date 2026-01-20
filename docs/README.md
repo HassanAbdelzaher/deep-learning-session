@@ -20,13 +20,29 @@ Welcome to the comprehensive learning documentation for Mathematics and Deep Lea
 - Vectors and vector operations
 - Matrices and matrix multiplication
 - Eigenvalues and eigenvectors
+- Linear transformations
 - Visualizations with graphs
 
+### [01a. Linear Algebra in Image Processing](01a_linear_algebra_image_processing.md) ⭐ NEW
+- Image representation as matrices
+- Image transformations (rotation, scaling, reflection)
+- Image filtering and convolution
+- Image compression using SVD
+- Edge detection
+- Image enhancement
+- Color image processing
+
 ### [02. Calculus](02_calculus.md)
-- Derivatives and gradients
+- Derivatives and tangent lines
+- Numerical integration
+- Chain rule
+
+### [02a. Gradients](gradients.md) ⭐ NEW
+- Gradient computation and visualization
 - Gradient descent optimization
-- Chain rule and backpropagation
 - Learning rate effects
+- Neural network gradients
+- Backpropagation and computation graphs
 
 ### [03. Statistics](03_statistics.md)
 - Descriptive statistics
