@@ -30,6 +30,7 @@ help: ## Show this help message
 	@echo   install-dev          Install development dependencies
 	@echo   datasets             Generate all datasets
 	@echo   student-dataset              Generate student degree dataset
+	@echo   simple-student-nn           Simple neural network example (complete workflow)
 	@echo   train-student-model          Train student classification model (custom NN)
 	@echo   test-student-model           Test student classification model (custom NN)
 	@echo   student-model               Complete student model pipeline (custom NN)
@@ -99,6 +100,12 @@ student-dataset: ## Generate student degree classification dataset
 	@echo Generating student degree dataset...
 	$(PYTHON) $(SCRIPTS_DIR)/generate_student_dataset.py
 	@echo [OK] Student dataset generated
+
+simple-student-nn: ## Simple neural network example (dataset, training, testing, saving, using)
+	@echo Running simple student neural network example...
+	@$(PYTHON) -c "import numpy; import pandas; import sklearn" 2>nul || $(PIP) install -q numpy pandas scikit-learn
+	$(PYTHON) $(SCRIPTS_DIR)/simple_student_nn.py
+	@echo [OK] Simple neural network example complete
 
 train-student-model: student-dataset ## Train student degree classification model
 	@echo Training student classification model...
@@ -305,6 +312,7 @@ run-tensorflow-student-classification: ## Run TensorFlow student degree classifi
 	@$(PYTHON) -c "import tensorflow" 2>nul || $(PIP) install -q tensorflow
 	@$(PYTHON) -c "import sklearn; import numpy; import pandas" 2>nul || $(PIP) install -q scikit-learn numpy pandas
 	$(PYTHON) $(SCRIPTS_DIR)/train_tensorflow_student_model.py
+
 
 # ============================================================================
 # Project Management
