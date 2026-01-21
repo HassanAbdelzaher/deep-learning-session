@@ -16,7 +16,7 @@ def generate_data(num_samples=100, seed=0):
     X = np.column_stack([exam_scores, attendance])
 
     # Simple rule for passing: pass if exam score >= 60 and attendance >= 60
-    y = np.where((exam_scores >= 60) | (attendance >= 60), 1, 0).astype(int)
+    y = np.where((exam_scores >= 60) & (attendance >= 60), 1, 0).astype(int)
     return X, y
 
 # Default to 100 samples if not specified elsewhere

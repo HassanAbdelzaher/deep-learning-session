@@ -65,6 +65,11 @@ help: ## Show this help message
 	@echo   generate-gradients-visualizations  Generate all gradient visualizations
 	@echo   run-statistics            Run statistics examples
 	@echo   run-neural-networks       Run neural network examples
+	@echo   run-perceptron            Run 2-feature perceptron example (Exam + Attendance)
+	@echo   run-perceptron-simple     Run 1-feature perceptron example (Exam only)
+	@echo   run-perceptron-sigmoid    Run perceptron with sigmoid activation (Gradient Descent)
+	@echo   run-multi-layer-perceptron  Run multi-layer perceptron (MLP with backpropagation)
+	@echo   run-logistic-regression  Run logistic regression (Sigmoid, Gradient Descent)
 	@echo   run-cnn                  Run CNN examples
 	@echo   run-rnn                  Run RNN examples
 	@echo.
@@ -293,6 +298,34 @@ run-statistics: ## Run statistics examples
 run-neural-networks: ## Run neural network examples
 	@echo Running neural network examples...
 	$(PYTHON) -c "from src.deep_learning.neural_networks import *; print('Neural networks module loaded')"
+
+run-perceptron: ## Run 2-feature perceptron example (Exam Score + Attendance)
+	@echo Running 2-feature perceptron example...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	$(PYTHON) $(SRC_DIR)/deep_learning/perceptron.py
+
+run-perceptron-simple: ## Run 1-feature perceptron example (Exam Score only)
+	@echo Running 1-feature perceptron example...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	$(PYTHON) $(SRC_DIR)/deep_learning/perceptron2.py
+
+run-perceptron-sigmoid: ## Run perceptron with sigmoid activation (Gradient Descent)
+	@echo Running perceptron with sigmoid activation...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) $(SRC_DIR)/deep_learning/perceptron_sigmoid.py
+
+run-multi-layer-perceptron: ## Run multi-layer perceptron (MLP with backpropagation)
+	@echo Running multi-layer perceptron...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) $(SRC_DIR)/deep_learning/multi_layer_perceptron.py
+
+run-logistic-regression: ## Run logistic regression example (Sigmoid activation, Gradient Descent)
+	@echo Running logistic regression example...
+	@$(PYTHON) -c "import matplotlib; import numpy" 2>nul || $(PIP) install -q matplotlib numpy
+	@if not exist docs\images mkdir docs\images
+	$(PYTHON) $(SRC_DIR)/deep_learning/logistic_regression.py
 
 run-cnn: ## Run CNN examples
 	@echo Running CNN examples...

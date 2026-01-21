@@ -20,121 +20,260 @@ Neural networks are computational models inspired by biological neurons. They co
 
 ## Perceptron
 
-### Single Perceptron
+### What is a Perceptron?
 
-A perceptron is the simplest neural network - a single neuron.
+A perceptron is the simplest neural network - a single neuron that can perform binary classification. It takes multiple inputs, applies weights and a bias, and produces a binary output (0 or 1) using a step activation function.
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, FancyArrowPatch
-import matplotlib.patches as mpatches
-
-def visualize_perceptron():
-    """Visualize a single perceptron"""
-    fig, ax = plt.subplots(figsize=(10, 8))
-    
-    # Input nodes
-    inputs = ['x₁', 'x₂', 'x₃']
-    input_positions = [(1, 3), (1, 2), (1, 1)]
-    
-    for i, (label, pos) in enumerate(zip(inputs, input_positions)):
-        circle = Circle(pos, 0.3, color='lightblue', ec='black', linewidth=2)
-        ax.add_patch(circle)
-        ax.text(pos[0], pos[1], label, ha='center', va='center', 
-               fontsize=14, fontweight='bold')
-    
-    # Neuron
-    neuron_pos = (3, 2)
-    neuron = Circle(neuron_pos, 0.4, color='lightgreen', ec='black', linewidth=2)
-    ax.add_patch(neuron)
-    ax.text(neuron_pos[0], neuron_pos[1], 'Σ', ha='center', va='center',
-           fontsize=16, fontweight='bold')
-    
-    # Output
-    output_pos = (5, 2)
-    output = Circle(output_pos, 0.3, color='lightcoral', ec='black', linewidth=2)
-    ax.add_patch(output)
-    ax.text(output_pos[0], output_pos[1], 'y', ha='center', va='center',
-           fontsize=14, fontweight='bold')
-    
-    # Weights
-    weights = ['w₁', 'w₂', 'w₃']
-    for i, (pos, weight) in enumerate(zip(input_positions, weights)):
-        arrow = FancyArrowPatch((pos[0]+0.3, pos[1]), (neuron_pos[0]-0.4, neuron_pos[1]),
-                               arrowstyle='->', mutation_scale=20, linewidth=1.5, color='blue')
-        ax.add_patch(arrow)
-        mid_x = (pos[0] + neuron_pos[0]) / 2
-        mid_y = pos[1] + 0.2
-        ax.text(mid_x, mid_y, weight, fontsize=10, ha='center',
-               bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.7))
-    
-    # Output arrow
-    arrow = FancyArrowPatch((neuron_pos[0]+0.4, neuron_pos[1]), (output_pos[0]-0.3, output_pos[1]),
-                           arrowstyle='->', mutation_scale=20, linewidth=2, color='red')
-    ax.add_patch(arrow)
-    
-    # Formula
-    ax.text(3, 0.3, 'y = f(w₁x₁ + w₂x₂ + w₃x₃ + b)', ha='center', fontsize=12,
-           bbox=dict(boxstyle='round', facecolor='yellow', alpha=0.7))
-    
-    ax.set_xlim(0, 6)
-    ax.set_ylim(0, 4)
-    ax.set_title('Single Perceptron', fontsize=16, fontweight='bold')
-    ax.axis('off')
-    plt.tight_layout()
-    plt.savefig('docs/images/perceptron.png', dpi=150, bbox_inches='tight')
-    plt.show()
-
-visualize_perceptron()
+**Mathematical Formula:**
+```
+z = w₁x₁ + w₂x₂ + ... + wₙxₙ + b
+y = step(z) = {1 if z ≥ 0, 0 otherwise}
 ```
 
-### Perceptron Decision Boundary
+### Perceptron Learning Algorithm
+
+The perceptron learning algorithm updates weights and bias when it makes a mistake:
+
+```
+If prediction is wrong:
+    w = w + learning_rate × (true_label - prediction) × input
+    b = b + learning_rate × (true_label - prediction)
+```
+
+### Practical Implementations
+
+We provide two complete perceptron implementations:
+
+#### 1. Two-Feature Perceptron (`perceptron.py`)
+
+A perceptron that uses **Exam Score** and **Attendance Percentage** to predict whether a student will pass or fail.
+
+**Features:**
+- 2 input features: Exam Score (40-100), Attendance (40-100%)
+- Binary classification: Pass (1) or Fail (0)
+- Rule: Pass if exam score ≥ 60 OR attendance ≥ 60
+- Visualizes 2D decision boundary
+
+**Usage:**
+```python
+# Run the complete perceptron example
+python src/deep_learning/perceptron.py
+```
+
+**Key Functions:**
+- `generate_data(num_samples, seed)`: Generates synthetic student data
+- `step(z)`: Step activation function
+- `predict_one(x, w, b)`: Predict for single sample
+- `predict(X, w, b)`: Predict for multiple samples
+- `train_perceptron(X, y, lr, epochs)`: Train the perceptron
+- `plot_decision_boundary(X, y, w, b)`: Visualize data and decision boundary
+
+**Example Output:**
+- Trained weights and bias
+- Decision boundary visualization (2D plot)
+- Training error evolution
+- Predictions on new students
+
+#### 2. One-Feature Perceptron (`perceptron2.py`)
+
+A simpler perceptron that uses only **Exam Score** to predict pass/fail.
+
+**Features:**
+- 1 input feature: Exam Score (40-100)
+- Binary classification: Pass (1) or Fail (0)
+- Rule: Pass if exam score ≥ 60
+- Visualizes 1D decision boundary (vertical line)
+
+**Usage:**
+```python
+# Run the simple perceptron example
+python src/deep_learning/perceptron2.py
+```
+
+**Key Differences from 2-feature version:**
+- Simpler decision boundary (single threshold)
+- Faster training
+- Easier to understand for beginners
+
+### Running the Perceptron Examples
+
+Both implementations include:
+1. **Data Generation**: Synthetic student records
+2. **Training**: Perceptron learning algorithm with early stopping
+3. **Visualization**: Decision boundary plots
+4. **Error Tracking**: Training error evolution over epochs
+5. **Prediction**: Test on new student data
+6. **Interactive Testing**: User input for custom predictions
+
+**Example: Training a Perceptron**
 
 ```python
-def perceptron_decision_boundary():
-    """Show how a perceptron creates a decision boundary"""
-    # Generate data
-    np.random.seed(42)
-    class0 = np.random.randn(50, 2) + [1, 1]
-    class1 = np.random.randn(50, 2) + [3, 3]
-    
-    # Simple perceptron: y = sign(w1*x1 + w2*x2 + b)
-    w1, w2, b = -1, 1, 0.5
-    
-    # Decision boundary: w1*x1 + w2*x2 + b = 0
-    # Solving for x2: x2 = -(w1*x1 + b) / w2
-    x1_boundary = np.linspace(-1, 5, 100)
-    x2_boundary = -(w1 * x1_boundary + b) / w2
-    
-    fig, ax = plt.subplots(figsize=(10, 8))
-    
-    # Plot data
-    ax.scatter(class0[:, 0], class0[:, 1], c='blue', s=100, alpha=0.6, 
-              label='Class 0', edgecolors='black', linewidth=1)
-    ax.scatter(class1[:, 0], class1[:, 1], c='red', s=100, alpha=0.6,
-              label='Class 1', edgecolors='black', linewidth=1)
-    
-    # Decision boundary
-    ax.plot(x1_boundary, x2_boundary, 'g-', linewidth=3, label='Decision Boundary')
-    
-    # Fill regions
-    ax.fill_between(x1_boundary, x2_boundary, 6, alpha=0.2, color='blue', label='Class 0 Region')
-    ax.fill_between(x1_boundary, x2_boundary, -2, alpha=0.2, color='red', label='Class 1 Region')
-    
-    ax.set_xlabel('x₁', fontsize=12)
-    ax.set_ylabel('x₂', fontsize=12)
-    ax.set_title('Perceptron Decision Boundary', fontsize=14, fontweight='bold')
-    ax.legend(fontsize=10)
-    ax.grid(True, alpha=0.3)
-    ax.set_xlim(-1, 5)
-    ax.set_ylim(-1, 5)
-    plt.tight_layout()
-    plt.savefig('docs/images/perceptron_boundary.png', dpi=150, bbox_inches='tight')
-    plt.show()
+# Direct execution (recommended)
+python src/deep_learning/perceptron.py
 
-perceptron_decision_boundary()
+# Or import functions (note: avoid importing from __init__.py due to torch dependency)
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path('.').absolute()))
+
+# For perceptron.py (2 features)
+exec(open('src/deep_learning/perceptron.py').read())
+
+# Or use Makefile commands
+# make run-perceptron        # 2-feature version
+# make run-perceptron-simple # 1-feature version
 ```
+
+**Complete Workflow:**
+
+1. **Data Generation**: Creates synthetic student records
+2. **Training**: Learns weights and bias using perceptron algorithm
+3. **Visualization**: Shows decision boundary and training progress
+4. **Prediction**: Tests on new student data
+5. **Interactive Testing**: Allows user input for custom predictions
+
+### Perceptron Limitations
+
+1. **Linearly Separable Data Only**: Can only learn linearly separable patterns
+2. **Binary Classification**: Only outputs 0 or 1
+3. **No Probabilities**: Doesn't provide confidence scores
+4. **Cannot Solve XOR**: Requires non-linear decision boundaries
+5. **Not Differentiable**: Step function is not differentiable → can't use gradient descent properly
+
+**Why Multi-Layer Networks?**
+- Single perceptrons can't learn complex patterns
+- Multiple layers with non-linear activations enable complex decision boundaries
+- This is why we need Multi-Layer Perceptrons (MLPs) for real-world problems
+
+## Logistic Regression: The Bridge to Neural Networks
+
+### Why Logistic Regression?
+
+**Perceptron Problem:**
+- Uses step function (hard 0/1) → **Not differentiable** → Can't use calculus properly
+
+**Logistic Regression Solution:**
+- Uses sigmoid function (smooth 0-1) → **Differentiable** → Enables Gradient Descent!
+
+### Key Differences from Perceptron
+
+| Feature | Perceptron | Logistic Regression |
+|---------|-----------|---------------------|
+| Activation | Step function | Sigmoid function |
+| Output | Hard 0/1 | Probability (0-1) |
+| Training | Perceptron update rule | Gradient Descent |
+| Loss Function | Error count | Binary Cross-Entropy |
+| Differentiable | ❌ No | ✅ Yes |
+
+### Mathematical Foundation
+
+**Core Formula:**
+```
+ŷ = σ(w·x + b)
+σ(z) = 1 / (1 + e^(-z))
+```
+
+Where:
+- `σ` is the sigmoid function (smooth, differentiable)
+- `w` are weights
+- `b` is bias
+- Output is a **probability** between 0 and 1
+
+### Sigmoid Activation Function
+
+The sigmoid function is the key innovation:
+
+```python
+def sigmoid(z):
+    """Sigmoid activation: smooth, differentiable, outputs probabilities"""
+    return 1 / (1 + np.exp(-z))
+```
+
+**Properties:**
+- ✅ Smooth and differentiable everywhere
+- ✅ Output range: (0, 1) → probabilities!
+- ✅ S-shaped curve
+- ✅ Enables gradient descent
+
+### Binary Cross-Entropy Loss
+
+Logistic regression uses a proper loss function:
+
+```
+L = -[y·log(ŷ) + (1-y)·log(1-ŷ)]
+```
+
+**Why this loss?**
+- Penalizes confident wrong predictions heavily
+- Works perfectly with probabilities
+- Differentiable everywhere
+
+### Gradient Descent Training
+
+Unlike perceptron's update rule, logistic regression uses gradient descent:
+
+```python
+# Compute gradients using calculus
+dw, db = compute_gradients(X, y, w, b)
+
+# Update using gradient descent
+w = w - learning_rate * dw
+b = b - learning_rate * db
+```
+
+**The Power of Calculus:**
+- We can compute exact gradients
+- We can optimize using gradient descent
+- This is the foundation of all neural network training!
+
+### Practical Implementation
+
+We provide a complete logistic regression implementation (`logistic_regression.py`):
+
+**Features:**
+- 2 input features: Exam Score, Attendance Percentage
+- Binary classification: Pass (1) or Fail (0)
+- Sigmoid activation function
+- Binary Cross-Entropy loss
+- Gradient Descent training
+- Probability outputs (not just 0/1)
+- Visualizations: decision boundary, probability surface, loss curve
+
+**Usage:**
+```python
+# Run the complete logistic regression example
+python src/deep_learning/logistic_regression.py
+
+# Or use Makefile
+make run-logistic-regression
+```
+
+**What You'll See:**
+1. **Training Progress**: Loss decreasing over epochs
+2. **Decision Boundary**: Smooth probability surface (not a hard line!)
+3. **3D Probability Surface**: See how probabilities change across feature space
+4. **Step vs Sigmoid Comparison**: Visual difference between perceptron and logistic regression
+5. **Predictions with Probabilities**: Get confidence scores, not just 0/1
+
+**Example Output:**
+```
+Student 1: Exam Score: 72.0, Attendance: 68.0%
+  Probability of Pass: 0.8542 (85.42%)
+  Prediction: Pass ✅
+  Confidence: High
+```
+
+### Why This Matters
+
+**Logistic Regression is the bridge from Perceptron to Neural Networks because:**
+
+1. ✅ **Differentiable**: Enables gradient descent (foundation of all deep learning)
+2. ✅ **Probabilities**: Provides confidence scores, not just decisions
+3. ✅ **Proper Loss Function**: Uses mathematical loss functions
+4. ✅ **Gradient Computation**: Shows how to compute gradients using calculus
+5. ✅ **Foundation for Neural Networks**: All neural networks use these concepts!
+
+**Next Step:** Multi-Layer Perceptrons use the same principles (sigmoid, gradient descent, loss functions) but with multiple layers!
 
 ## Multi-Layer Perceptron
 

@@ -53,7 +53,10 @@ Welcome to the comprehensive learning documentation for Mathematics and Deep Lea
 ## Deep Learning
 
 ### [04. Neural Networks](04_neural_networks.md)
-- Perceptron and MLP architecture
+- Perceptron implementations (1-feature and 2-feature examples)
+- Perceptron learning algorithm
+- **Logistic Regression** (Sigmoid activation, Gradient Descent) ⭐ NEW
+- MLP architecture
 - Forward and backward propagation
 - Activation functions
 - Training process visualization
