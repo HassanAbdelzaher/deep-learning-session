@@ -3,23 +3,20 @@ import matplotlib.pyplot as plt
 
 # =========================================================
 # 1) Generate Synthetic Training Data (parameterized number of students)
-#    Features: [Exam Score, Attendance Percentage]
-#    Labels: y = 1 if student would "pass", else 0 (simple rule)
+#    Features: [Exam Score]
+#    Labels: y = 1 if student would "pass", else 0 (based only on score)
 # =========================================================
 def generate_data(num_samples=100, seed=0):
     np.random.seed(seed)  # For reproducibility
 
     # Generate exam scores between 40 and 100
-    exam_scores = np.random.uniform(40, 100, num_samples)
-    # Generate attendance between 40% and 100%
-    attendance = np.random.uniform(40, 100, num_samples)
-    X = np.column_stack([exam_scores, attendance])
+    exam_scores = np.random.uniform(40, 100, num_samples).reshape(-1, 1)
 
-    # Simple rule for passing: pass if exam score >= 60 and attendance >= 60
-    y = np.where((exam_scores >= 60) | (attendance >= 60), 1, 0).astype(int)
-    return X, y
+    # Simple rule for passing: pass if exam score >= 60
+    y = np.where(exam_scores[:, 0] >= 60, 1, 0).astype(int)
+    return exam_scores, y
 
-# Default to 100 samples if not specified elsewhere
+# Default to 1000 samples if not specified elsewhere
 NUM_SAMPLES = 1000
 X, y = generate_data(num_samples=NUM_SAMPLES, seed=0)
 
@@ -59,14 +56,7 @@ def predict(X: np.ndarray, w: np.ndarray, b: float) -> np.ndarray:
 
 # =========================================================
 # 4) Perceptron Training (Learning Algorithm)
-#    Classic perceptron update rule:
-#    If the perceptron misclassifies a sample, we move the weights towards correct classification:
-#        w = w + lr * (y - y_hat) * x
-#        b = b + lr * (y - y_hat)
-#    - lr: learning rate (how "big" the step is)
-#    - epochs: number of passes over the dataset
-#    Stop early if all samples classified correctly in an epoch.
-#    Track errors to see learning progress.
+#    Classic perceptron update rule for score-only feature
 # =========================================================
 def train_perceptron(X: np.ndarray, y: np.ndarray, lr: float = 0.9, epochs: int = 50):
     """
@@ -76,30 +66,24 @@ def train_perceptron(X: np.ndarray, y: np.ndarray, lr: float = 0.9, epochs: int 
         b: learned bias (float)
         errors_history: number of classification errors per epoch
     """
-    # Initialize weights (zeros) and bias
-    w = np.zeros(X.shape[1], dtype=float)  # n_features = 2 in this case
+    # Now n_features = 1
+    w = np.zeros(X.shape[1], dtype=float)
     b = 0.0
 
-    # Track the number of misclassifications per epoch (for plotting)
     errors_history = []
 
     for epoch in range(epochs):
-        errors = 0  # reset counter for this pass
-
-        # Go through every training sample
+        errors = 0
         for xi, yi in zip(X, y):
-            y_hat = predict_one(xi, w, b)          # model prediction
-            error = yi - y_hat                     # +1 if under-predicted, -1 if over-predicted, 0 if correct
+            y_hat = predict_one(xi, w, b)
+            error = yi - y_hat
 
-            # Only update if there's a misclassification
             if error != 0:
-                w = w + lr * error * xi            # shift weights toward correct class
-                b = b + lr * error                 # update bias
-                errors += 1                        # count this mistake
+                w = w + lr * error * xi
+                b = b + lr * error
+                errors += 1
 
         errors_history.append(errors)
-
-        # If no errors, we've learned a perfect separator
         if errors == 0:
             print(f"Early stopping at epoch {epoch} (zero errors reached)")
             break
@@ -108,56 +92,45 @@ def train_perceptron(X: np.ndarray, y: np.ndarray, lr: float = 0.9, epochs: int 
 
 # =========================================================
 # 5) Actual Training
-#    Train the perceptron using the above logic.
-#    Adjust learning_rate (lr) or epochs if training doesn't converge.
-#    Print the learned weights, bias, and last errors for diagnostics.
 # =========================================================
-w, b, errors_history = train_perceptron(X, y, lr=0.5, epochs=1000)
+w, b, errors_history = train_perceptron(X, y, lr=0.5, epochs=500)
 
 print("Final learned weights w =", w)
 print("Final learned bias b =", b)
-print("Errors per epoch (last 10 epochs):", errors_history[-10:])  # Can indicate convergence
+print("Errors per epoch (last 10 epochs):", errors_history[-10:])
 
 # =========================================================
 # 6) Plot Data + Decision Boundary
 #    Show the input samples, label colors, and the decision boundary found.
-#    - Decision line: w1 * x1 + w2 * x2 + b = 0
-#    - Can be solved for x2: x2 = -(w1*x1 + b) / w2 (unless w2 ~ 0, then vertical)
+#    - Decision line: w1 * x1 + b = 0  -->  x1 = -b/w1 (since only one feature)
 # =========================================================
 def plot_decision_boundary(X: np.ndarray, y: np.ndarray, w: np.ndarray, b: float):
     """
-    Visualize 2D data with the perceptron decision boundary.
+    Visualize 1D data with the perceptron decision boundary (vertical line).
     """
     passed = X[y == 1]
     failed = X[y == 0]
 
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(8, 3))
 
-    # Plot data points
-    plt.scatter(passed[:, 0], passed[:, 1], color="green", label="Pass (1)")
-    plt.scatter(failed[:, 0], failed[:, 1], color="red", label="Fail (0)")
+    # Plot data points along single feature axis
+    plt.scatter(passed[:, 0], np.zeros_like(passed[:, 0]) + 0.2, color="green", label="Pass (1)", alpha=0.6, s=60)
+    plt.scatter(failed[:, 0], np.zeros_like(failed[:, 0]) - 0.2, color="red", label="Fail (0)", alpha=0.6, s=60)
 
-    # Range for exam scores (x1 axis)
-    x1_min, x1_max = X[:, 0].min() - 5, X[:, 0].max() + 5
-    x1_values = np.linspace(x1_min, x1_max, 200)
-
-    # Decision boundary
-    if abs(w[1]) < 1e-9:
-        # w2 nearly zero: vertical line at x1 = -b/w1
-        x1_const = -b / w[0] if abs(w[0]) > 1e-9 else 0
-        plt.axvline(x=x1_const, linestyle="--", color="black", label="Decision Boundary")
-        plt.text(x1_const, plt.ylim()[1]-5, f"Boundary (vertical)", rotation=90)
+    # Mark the decision boundary: x1 = -b/w1
+    if abs(w[0]) > 1e-9:
+        boundary_x = -b / w[0]
+        plt.axvline(x=boundary_x, linestyle="--", color="black", label="Decision Boundary")
+        plt.text(boundary_x, 0.32, f"Boundary = {boundary_x:.2f}", rotation=90)
     else:
-        # Regular case: plot x2 as function of x1
-        x2_values = -(w[0] * x1_values + b) / w[1]
-        plt.plot(x1_values, x2_values, linestyle="--", color="blue", label="Decision Boundary")
+        plt.axvline(x=0, linestyle="--", color="black", label="Degenerate Boundary")
 
-    # Labels and legend
-    plt.xlabel("Exam Score (x1)")
-    plt.ylabel("Attendance Percentage (x2)")
-    plt.title("Perceptron: Data Points & Learned Decision Boundary")
-    plt.grid(True)
+    plt.xlabel("Exam Score")
+    plt.yticks([])
+    plt.ylim(-0.6, 0.6)
+    plt.title("Perceptron (Score Only): Data Points & Decision Boundary")
     plt.legend()
+    plt.grid(True, axis="x")
     plt.tight_layout()
     plt.show()
 
@@ -165,7 +138,6 @@ plot_decision_boundary(X, y, w, b)
 
 # =========================================================
 # 7) Plot Error Evolution During Training
-#    See how errors decrease with epochs. When it hits zero, model fits perfectly.
 # =========================================================
 plt.figure(figsize=(8, 4))
 plt.plot(errors_history, marker='o')
@@ -177,14 +149,13 @@ plt.tight_layout()
 plt.show()
 
 # =========================================================
-# 8) Predict for a New Student
-#    Example: Given a new student's exam score and attendance, will they pass?
-#    The perceptron prediction is shown, with a user-friendly label.
+# 8) Predict for a New Student (score only)
 # =========================================================
-new_student = np.array([72, 68], dtype=float)  # Example: exam score 72, attendance 68
+new_student_score = 72  # Example: exam score 72
+new_student = np.array([new_student_score], dtype=float)
 pred = predict_one(new_student, w, b)
 
-print("\nPrediction for new student: Exam Score =", new_student[0], "Attendance =", new_student[1])
+print("\nPrediction for new student: Exam Score =", new_student_score)
 if pred == 1:
     print("Result: Pass ✅ (The perceptron predicts this student WILL pass)")
 else:
@@ -192,25 +163,23 @@ else:
 
 
 # =========================================================
-# 9) User Input Test Section
-#    Allow user to enter new student data and display perceptron prediction.
+# 9) User Input Test Section (score only)
 # =========================================================
 
 def test_with_user_input():
-    print("\n=== Test the perceptron with your own input ===")
+    print("\n=== Test the perceptron with your own input (Score only) ===")
     try:
         user_exam = float(input("Enter exam score (e.g., 60): ").strip())
-        user_attendance = float(input("Enter attendance percentage (e.g., 70): ").strip())
-        user_sample = np.array([user_exam, user_attendance], dtype=float)
+        user_sample = np.array([user_exam], dtype=float)
         user_pred = predict_one(user_sample, w, b)
-        print(f"\nYour input: Exam Score = {user_exam}, Attendance = {user_attendance}")
+        print(f"\nYour input: Exam Score = {user_exam}")
         if user_pred == 1:
             print("Result: Pass ✅ (The perceptron predicts this student WILL pass)")
         else:
             print("Result: Fail ❌ (The perceptron predicts this student will NOT pass)")
     except Exception as e:
         print(f"Error with your input: {e}")
-        print("Please make sure to enter valid numerical values.")
+        print("Please make sure to enter a valid numerical value.")
 
 # Uncomment this to enable user input test when running interactively
 if __name__ == "__main__":
